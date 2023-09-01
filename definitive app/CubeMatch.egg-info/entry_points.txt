@@ -1,0 +1,2 @@
+[consoles_scripts]
+cubematch = cubematchfinance.__main__:main

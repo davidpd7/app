@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pdfplumber = "*"
+pypdf2 = "*"
+pyqt5 = "*"
+pandas = "*"
+pyxlsb = "*"
+openpyxl = "*"
+docx2pdf = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

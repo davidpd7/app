@@ -1,0 +1,7 @@
+pdfplumber
+PyPDF2
+PyQt5
+pandas
+pyxlsb
+openpyxl
+docx2pdf
