@@ -6,11 +6,12 @@ name = "pypi"
 [packages]
 pdfplumber = "*"
 pypdf2 = "*"
-pyqt5 = "*"
 pandas = "*"
 pyxlsb = "*"
 openpyxl = "*"
 docx2pdf = "*"
+pyqt6 = "*"
+cubematch = {editable = true, path = "."}
 
 [dev-packages]
 

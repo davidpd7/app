@@ -1,3 +1,4 @@
+pyproject.toml
 setup.py
 CubeMatch.egg-info/PKG-INFO
 CubeMatch.egg-info/SOURCES.txt
