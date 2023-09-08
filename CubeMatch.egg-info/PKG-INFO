@@ -1,5 +1,20 @@
+<<<<<<< HEAD:CubeMatch.egg-info/PKG-INFO
 Metadata-Version: 2.1
 Name: CubeMatch
 Version: 0.1
 Author: David Perez
 Author-email: david.perez@cubematch.com
+=======
+Metadata-Version: 2.1
+Name: CubeMatch
+Version: 0.1
+Author: David Perez
+Author-email: david.perez@cubematch.com
+Requires-Dist: pdfplumber
+Requires-Dist: PyPDF2
+Requires-Dist: PyQt5
+Requires-Dist: pandas
+Requires-Dist: pyxlsb
+Requires-Dist: openpyxl
+Requires-Dist: docx2pdf
+>>>>>>> b2eb642f0793904e283e4b899309c1afe882d125:definitive app/CubeMatch.egg-info/PKG-INFO
