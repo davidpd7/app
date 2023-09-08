@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fa75d36ddc7536534ceaf389b35f74487c10b571f897cc2c3864c46d0e606b15"
+            "sha256": "c973fede1509790b984ceaed99891660ea6836326d5fb2233f52e039c10cbc21"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -205,7 +205,7 @@
         },
         "cubematch": {
             "editable": true,
-            "path": "."
+            "file": "."
         },
         "docx2pdf": {
             "hashes": [
@@ -213,6 +213,7 @@
                 "sha256:6d2c20f9ad36eec75f4da017dc7a97622946954a6124ca0b11772875fa86fbed"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.5'",
             "version": "==0.1.8"
         },
         "et-xmlfile": {
@@ -260,6 +261,7 @@
                 "sha256:f91456ead12ab3c6c2e9491cf33ba6d08357d802192379bb482f1033ade496f5"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.6'",
             "version": "==3.1.2"
         },
         "pandas": {
@@ -285,6 +287,7 @@
                 "sha256:eb20252720b1cc1b7d0b2879ffc7e0542dd568f24d7c4b2347cb035206936421"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.9'",
             "version": "==2.1.0"
         },
         "pdfminer.six": {
@@ -301,6 +304,7 @@
                 "sha256:60db7de9258e95e7b92ddb745e2e3e294da7a4a55d18fb85750cc4f8d994734c"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.8'",
             "version": "==0.10.2"
         },
         "pillow": {
@@ -378,6 +382,7 @@
                 "sha256:d16e4205cfee272fbdc0568b68d82be796540b1537508cef59388f839c191928"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.6'",
             "version": "==3.0.1"
         },
         "pypdfium2": {
@@ -453,6 +458,7 @@
                 "sha256:ff1d12767b578f0f0e87cdb12198e7dcad9a176c40d1d1d799984181b0af93cb"
             ],
             "index": "pypi",
+            "markers": "python_full_version >= '3.6.1'",
             "version": "==6.5.2"
         },
         "pyqt6-qt6": {

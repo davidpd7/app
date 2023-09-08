@@ -1,4 +1,3 @@
-pyproject.toml
 setup.py
 CubeMatch.egg-info/PKG-INFO
 CubeMatch.egg-info/SOURCES.txt
@@ -8,4 +7,6 @@ CubeMatch.egg-info/requires.txt
 CubeMatch.egg-info/top_level.txt
 cubematchfinance/__init__.py
 cubematchfinance/__main__.py
-cubematchfinance/app.py
+cubematchfinance/controller.py
+cubematchfinance/models.py
+cubematchfinance/view.py

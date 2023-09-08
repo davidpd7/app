@@ -1,15 +1,20 @@
 import sys
-from cubematchfinance.app import App
+
+from PyQt6.QtWidgets import QApplication
+
+from cubematchfinance.view import View
+
 
 def main(args = None):
-    if args is None:
-        args = sys.argv[1:]
-    
-    app = App()
-    app.show()
-    app.run()
+
+    app = QApplication(sys.argv)
+    view = View()
+    view.show()
+
+    sys.exit(app.exec())
+
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
     
     

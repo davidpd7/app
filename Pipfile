@@ -11,7 +11,7 @@ pyxlsb = "*"
 openpyxl = "*"
 docx2pdf = "*"
 pyqt6 = "*"
-cubematch = {editable = true, path = "."}
+cubematch = {file = ".", editable = true}
 
 [dev-packages]
 
