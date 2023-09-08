@@ -1,5 +1,5 @@
 {   "app":{
-    "app_title": "CubeMatch Finance",
+            "title": "CubeMatch Finance"
     },
     
     "tabs":{
@@ -31,8 +31,8 @@
             "push_buttons" : ["Browse Clarity Extract",
                             "Extract Clarity Details"]
         }
-    }
-    
+        }
 
 }
         
+  
