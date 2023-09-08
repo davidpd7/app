@@ -1,0 +1,38 @@
+{   "app":{
+    "app_title": "CubeMatch Finance",
+    },
+    
+    "tabs":{
+
+        "tab1":{ 
+            "name" : "Timesheets",
+            "push_buttons":["Browse","Rename"]   
+        },
+        "tab2": {
+            "name": "Sales Invoices",
+            "push_buttons":["Browse","Raname"]
+        },
+        "tab3": {
+            "name": "Purchase Invoices",
+            "push_buttons": ["Browse Invoices", 
+                            "Browse Purchase Book", 
+                            "Rename"],
+            "check_buttons": ["Other Invoices", 
+            "Contractor Invoices", 
+            "Non-contractor Invoices"]
+        },
+        "tab4": {
+            "name" : "Salary File (CMBV)",
+            "push_buttons":["Browse PDF Salaries File",
+                            "Extract Salaries"]
+        },
+        "tab5": {
+            "name" : "Clarity",
+            "push_buttons" : ["Browse Clarity Extract",
+                            "Extract Clarity Details"]
+        }
+    }
+    
+
+}
+        
