@@ -44,26 +44,22 @@ class View(QMainWindow):
         self.__create_and_add_tabs()
 
         self.__create_buttons()
-        self.__create_box_buttons()
-        #self.__create_list_widgets()
+        #self.__create_box_buttons()
         self.test()
-  
 
     
     def __create_and_add_tabs(self):
 
        
-        self.__tabs = QTabWidget()
-        self.vlayout.addWidget(self.__tabs)
+        __tabs = QTabWidget()
+        self.vlayout.addWidget(__tabs)
         self.__tab_widgets = {}
-        self.layout = QGridLayout()
 
         for tab in cfg_item("tabs"):
             self.__tab_widgets[tab] = QWidget()
-            self.__tabs.addTab(self.__tab_widgets[tab], cfg_item("tabs", tab, "name"))
-            self.__tab_widgets[tab].setLayout(self.layout)
-            
+            __tabs.addTab(self.__tab_widgets[tab], cfg_item("tabs", tab, "name"))
 
+            
     def __create_list_widgets(self):
 
         self.__list_widgets = {}
@@ -74,32 +70,28 @@ class View(QMainWindow):
     
     def __create_buttons(self):
 
-       for tab in cfg_item("tabs"):
-            layout = QHBoxLayout()
+        for tab in cfg_item("tabs"):
             button_names = cfg_item("tabs", tab, "push_buttons")
+            layout = QHBoxLayout()
+            self.__tab_widgets[tab].setLayout(layout)  
             for name in button_names:
-                self.__buttons = {}
-                self.__buttons[tab + name]= QPushButton(name)            
-    
-                
-
+                button = QPushButton(name)
+                layout.addWidget(button) 
         
     def __create_box_buttons(self):
         
-        names = ["Other Invoices", 
-                 "Contractor Invoices", 
-                 "Non-contractor Invoices"]
+        for tab in cfg_item("tabs"):
+            button_names = cfg_item("tabs", tab, "check_buttons")
+            if button_names:
+                layout = QVBoxLayout()
+                self.__tab_widgets[tab].setLayout(layout)  
+                for name in button_names:
+                    button = QRadioButton(name)
+                layout.addWidget(button) 
 
-        self.__box__buttons = {}
-        
-        for name in names:
-            self.__box__buttons[name]= QRadioButton(name)
-
-    
 
     def test(self):
-        pass #for tab in cfg_item("tabs"):
-            #print(f'{tab},{cfg_item("tabs", tab, "push_buttons")}')
+        pass 
 
     
 

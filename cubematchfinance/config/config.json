@@ -18,8 +18,8 @@
                             "Browse Purchase Book", 
                             "Rename"],
             "check_buttons": ["Other Invoices", 
-            "Contractor Invoices", 
-            "Non-contractor Invoices"]
+                            "Contractor Invoices", 
+                            "Non-contractor Invoices"]
         },
         "tab4": {
             "name" : "Salary File (CMBV)",
