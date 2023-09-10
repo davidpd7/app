@@ -16,7 +16,6 @@ from cubematchfinance.config.config import cfg_item
 import cubematchfinance.entities.tabs as tabs
 
 
-
 class View(QMainWindow):
      
     __title = cfg_item("app","title")
@@ -41,15 +40,18 @@ class View(QMainWindow):
         self.__central_widget = QWidget(self)
         self.setCentralWidget(self.__central_widget)
 
-        self.vlayout = QVBoxLayout()
-        self.__central_widget.setLayout(self.vlayout)
+        self.__vlayout = QHBoxLayout()
+        self.__central_widget.setLayout(self.__vlayout)
         self.__create_and_add_tabs()
+        self.add_link_buttons()
+
+    
 
     
     def __create_and_add_tabs(self):
 
         __tabs = QTabWidget()
-        self.vlayout.addWidget(__tabs)
+        self.__vlayout.addWidget(__tabs)
         self.__layout = QHBoxLayout()
         
         tabs_list = inspect.getmembers(tabs)
@@ -58,37 +60,29 @@ class View(QMainWindow):
             if inspect.isclass(object) and "TabApp" in name_object:
                 tab_instance = object()
                 __tabs.addTab(tab_instance, tab_instance.get_name())
-            
-    def __create_list_widgets(self):
-
-        self.__list_widgets = {}
-        for i in range(len(self.__tab_widgets)):
-            list_name = 'list'+str(i)
-            self.__list_widgets[list_name] = QListWidget(self)
-
     
-    def __create_buttons(self):
 
-        for tab in cfg_item("tabs"):
-            button_names = cfg_item("tabs", tab, "push_buttons")
-            layout = QHBoxLayout()
-            for name in button_names:
-                button = QPushButton(name)
-                self.__layout.addWidget(button) 
-        
-    def __create_box_buttons(self):
-        
-        for tab in cfg_item("tabs"):
-            if 'check_buttons' in cfg_item("tabs", tab):
-                button_names = cfg_item("tabs", tab, "check_buttons")
-                layout_check_box = QHBoxLayout()
-                self.__tab_widgets[tab].setLayout(layout_check_box)  
-                for name in button_names:
-                    button = QRadioButton(name)
-                    layout_check_box.addWidget(button) 
+    def create_link_buttons(self, button, description):
             
-    def test(self):
-        pass 
+        button = QPushButton()
+        label = QLabel(description)
+        label.setAligment(Qt.AignCenter)
+        label.setStyleSheet("font-size:")
+        return button, label
+    
+    def add_link_buttons(self):
+            
+            vbox = QVBoxLayout()
+            button_names = cfg_item("main", "push_buttons", "names")
+            self.__buttons_links = {}
+            self.__vlayout.addLayout(vbox)
+
+            for name in button_names:
+                self.__buttons_links[name] = QPushButton(name)
+                self.__buttons_links[name].setFixedSize(100,20)
+                vbox.addWidget(self.__buttons_links[name])
+
+        
 
 
 

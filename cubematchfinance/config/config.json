@@ -1,14 +1,26 @@
 {   "app":{
             "title": "CubeMatch Finance"
     },
-    
+
+
+    "main":{
+
+        "push_buttons" : {
+            "names" : ["TimeSheet IE",
+            "TimeSheet UK",
+            "Xero",
+            "HubDoc",
+            "SharePoint"]
+        }
+
+    } ,
     "tabs":{
 
         "tab1":{ 
             "name" : "Timesheets",
             "push_buttons":{
                 "names": ["Browse","Rename"],
-                "size": [100,80]
+                "size": [100,40]
             }
                 
         },
@@ -16,7 +28,7 @@
             "name": "Sales Invoices",
             "push_buttons":{
                "names":["Browse","Raname"],
-               "size": [100,80]
+               "size": [100,40]
             }
         },
         "tab3": {
@@ -25,7 +37,7 @@
                 "names":["Browse Invoices", 
                             "Browse Purchase Book", 
                             "Rename"],
-                "size": [150,80]},
+                "size": [150,40]},
             "check_buttons": 
             {
                 "names":["Other Invoices", 
@@ -40,7 +52,7 @@
             "push_buttons":{
                 "names":["Browse PDF Salaries File",
                         "Extract Salaries"],
-                "size": [150,80]
+                "size": [150,40]
             }
         },
         "tab5": {
@@ -49,7 +61,7 @@
                "names":["Browse Clarity Extract",
                             "Extract Clarity Details"],
 
-                "size": [150,80]}
+                "size": [150,40]}
 
         }
         }
