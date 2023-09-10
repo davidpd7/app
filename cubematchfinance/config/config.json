@@ -44,7 +44,10 @@
                             "Contractor Invoices", 
 
                             "Non-contractor Invoices"],
-                "size": [150,50]
+                "size": [150,50],
+                "pos":[[0,2],
+                        [1,2],
+                        [2,2]]
                         }
         },
         "tab4": {

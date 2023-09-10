@@ -13,10 +13,10 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QTableWidget, QHB
 class TabBase(QWidget):
     def __init__(self, config_path):
         super().__init__()
-        self.__config_path = config_path
-        self.__name = cfg_item(*self.__config_path, "name")
-        self.__tab_layout = QVBoxLayout()
-        self.setLayout(self.__tab_layout)
+        self.config_path = config_path
+        self.__name = cfg_item(*self.config_path, "name")
+        self.tab_layout = QVBoxLayout()
+        self.setLayout(self.tab_layout)
         self.__tab_widgets()
 
     def __tab_widgets(self):
@@ -24,19 +24,19 @@ class TabBase(QWidget):
         self.__create_table()
 
     def __create_buttons(self):
-        button_names = cfg_item(*self.__config_path, "push_buttons", "names")
-        buttons_layout = QVBoxLayout()
-        self.__tab_layout.addLayout(buttons_layout)
+        button_names = cfg_item(*self.config_path, "push_buttons", "names")
+        self.buttons_layout = QGridLayout()
+        self.tab_layout.addLayout(self.buttons_layout)
         self.__buttons = {}
 
         for name in button_names:
             self.__buttons[name] = QPushButton(name)
-            self.__buttons[name].setFixedSize(*cfg_item(*self.__config_path, "push_buttons", "size"))
-            buttons_layout.addWidget(self.__buttons[name])
+            self.__buttons[name].setFixedSize(*cfg_item(*self.config_path, "push_buttons", "size"))
+            self.buttons_layout.addWidget(self.__buttons[name])
 
     def __create_table(self):
         table_layout = QHBoxLayout()
-        self.__tab_layout.addLayout(table_layout)
+        self.tab_layout.addLayout(table_layout)
         table = QTableWidget()
         table.setColumnCount(4)
         table_layout.addWidget(table)
@@ -55,21 +55,17 @@ class SecondTabApp(TabBase):
 
 class ThirdTabApp(TabBase):
     def __init__(self):
-        super().__init__(("tabs", 'tab3'))
-
-      
+        super().__init__(config_path=("tabs", 'tab3')) 
+        self.__create_check_buttons()
+        
     def __create_check_buttons(self):
-
-        button_names = cfg_item(*ThirdTabApp.__config_path, "check_buttons", "names")
-        buttons_layout = QHBoxLayout()
-        self.__tab_layout.addLayout(buttons_layout)
-        self.__check_buttons = {}
-
-        for name in button_names:
-            self.__check_buttons[name] = QRadioButton(name)
-            self.__check_buttons[name].setFixedSize(*cfg_item(*ThirdTabApp.__config_path, "check_buttons", "size"))
-            buttons_layout.addWidget(self.__check_buttons[name])
-
+        names = cfg_item(*self.config_path, "check_buttons", "names")
+        positions = cfg_item(*self.config_path, "check_buttons", "pos")
+        self.__check_buttons = {}   
+        for name, pos in zip(names, positions):
+                self.__check_buttons[name] = QRadioButton(name)
+                self.__check_buttons[name].setFixedSize(*cfg_item(*self.config_path, "check_buttons", "size"))
+                self.buttons_layout.addWidget(self.__check_buttons[name], *pos)
 
 class FourthTabApp(TabBase):
     def __init__(self):
