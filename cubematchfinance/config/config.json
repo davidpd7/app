@@ -6,30 +6,51 @@
 
         "tab1":{ 
             "name" : "Timesheets",
-            "push_buttons":["Browse","Rename"]   
+            "push_buttons":{
+                "names": ["Browse","Rename"],
+                "size": [100,80]
+            }
+                
         },
         "tab2": {
             "name": "Sales Invoices",
-            "push_buttons":["Browse","Raname"]
+            "push_buttons":{
+               "names":["Browse","Raname"],
+               "size": [100,80]
+            }
         },
         "tab3": {
             "name": "Purchase Invoices",
-            "push_buttons": ["Browse Invoices", 
+            "push_buttons": {
+                "names":["Browse Invoices", 
                             "Browse Purchase Book", 
                             "Rename"],
-            "check_buttons": ["Other Invoices", 
+                "size": [150,80]},
+            "check_buttons": 
+            {
+                "names":["Other Invoices", 
                             "Contractor Invoices", 
-                            "Non-contractor Invoices"]
+
+                            "Non-contractor Invoices"],
+                "size": [150,50]
+                        }
         },
         "tab4": {
             "name" : "Salary File (CMBV)",
-            "push_buttons":["Browse PDF Salaries File",
-                            "Extract Salaries"]
+            "push_buttons":{
+                "names":["Browse PDF Salaries File",
+                        "Extract Salaries"],
+                "size": [150,80]
+            }
         },
         "tab5": {
             "name" : "Clarity",
-            "push_buttons" : ["Browse Clarity Extract",
-                            "Extract Clarity Details"]
+            "push_buttons" : {
+               "names":["Browse Clarity Extract",
+                            "Extract Clarity Details"],
+
+                "size": [150,80]}
+
         }
         }
 
