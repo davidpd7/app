@@ -1,5 +1,6 @@
 import sys
 import os
+import inspect
 
 from PyQt6 import QtGui
 from PyQt6.QtCore import QUrl, QSize, Qt
@@ -12,6 +13,9 @@ from PyQt6.QtGui import QPixmap, QDesktopServices
 from pathlib import Path
 
 from cubematchfinance.config.config import cfg_item
+import cubematchfinance.entities.tabs as tabs
+
+
 
 class View(QMainWindow):
      
@@ -33,32 +37,27 @@ class View(QMainWindow):
                          View.__top, 
                          View.__width, 
                          View.__height)
+        
         self.__central_widget = QWidget(self)
         self.setCentralWidget(self.__central_widget)
 
- 
         self.vlayout = QVBoxLayout()
-
         self.__central_widget.setLayout(self.vlayout)
-
         self.__create_and_add_tabs()
-
-        self.__create_buttons()
-        #self.__create_box_buttons()
-        self.test()
 
     
     def __create_and_add_tabs(self):
 
-       
         __tabs = QTabWidget()
         self.vlayout.addWidget(__tabs)
-        self.__tab_widgets = {}
+        self.__layout = QHBoxLayout()
+        
+        tabs_list = inspect.getmembers(tabs)
 
-        for tab in cfg_item("tabs"):
-            self.__tab_widgets[tab] = QWidget()
-            __tabs.addTab(self.__tab_widgets[tab], cfg_item("tabs", tab, "name"))
-
+        for name_object, object in tabs_list:
+            if inspect.isclass(object) and "TabApp" in name_object:
+                tab_instance = object()
+                __tabs.addTab(tab_instance, tab_instance.get_name())
             
     def __create_list_widgets(self):
 
@@ -73,26 +72,27 @@ class View(QMainWindow):
         for tab in cfg_item("tabs"):
             button_names = cfg_item("tabs", tab, "push_buttons")
             layout = QHBoxLayout()
-            self.__tab_widgets[tab].setLayout(layout)  
             for name in button_names:
                 button = QPushButton(name)
-                layout.addWidget(button) 
+                self.__layout.addWidget(button) 
         
     def __create_box_buttons(self):
         
         for tab in cfg_item("tabs"):
-            button_names = cfg_item("tabs", tab, "check_buttons")
-            if button_names:
-                layout = QVBoxLayout()
-                self.__tab_widgets[tab].setLayout(layout)  
+            if 'check_buttons' in cfg_item("tabs", tab):
+                button_names = cfg_item("tabs", tab, "check_buttons")
+                layout_check_box = QHBoxLayout()
+                self.__tab_widgets[tab].setLayout(layout_check_box)  
                 for name in button_names:
                     button = QRadioButton(name)
-                layout.addWidget(button) 
-
-
+                    layout_check_box.addWidget(button) 
+            
     def test(self):
         pass 
 
+
+
+        
     
 
 
