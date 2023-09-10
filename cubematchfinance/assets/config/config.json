@@ -5,15 +5,40 @@
 
     "main":{
 
-        "push_buttons" : {
-            "names" : ["TimeSheet IE",
-            "TimeSheet UK",
-            "Xero",
-            "HubDoc",
-            "SharePoint"]
+        "push_buttons1" : 
+        {
+            "name" : "TimeSheet IE",
+            "icon_path":[
+                "images", "tsheet.png"],
+            "url":"https://cubematch-ie.timesheetportal.com/Default.aspx?ReturnUrl=%2fDashboard%2f.jpeg"
+        },
+        "push_buttons2" : 
+        {
+            "name" : "TimeSheet UK",
+            "icon_path":["cubematchfinance", "assets","images","tsheet.png"],
+            "url":"https://cubematch-uk.timesheetportal.com/Dashboard/"
+        },
+        "push_buttons3" : 
+        {
+            "name" : "Xero",
+            "icon_path":["cubematchfinance", "assets","images","xero.png"],
+            "url": "https://go.xero.com/app/!TGd98/dashboard"
+        },
+        "push_buttons4" : 
+        {
+            "name" : "HubDoc",
+            "icon_path":["cubematchfinance", "assets","images","hubdoc.png"],
+            "url": "https://app.hubdoc.com/login?targeturl=user%2F59255060-ce16-4995-b806-cdfa5b5f2ba6%2F"
+        },
+        "push_buttons5" : 
+        {
+            "name" : "SharePoint",
+            "icon_path":["cubematchfinance", "assets","images","sharepoint.png"],
+            "url":"https://cubematchltd.sharepoint.com/sites/GroupFinance/Shared%20Documents/Forms/AllItems.aspx"
         }
-
-    } ,
+          
+        },
+    
     "tabs":{
 
         "tab1":{ 
@@ -68,7 +93,8 @@
 
         }
         }
-
+    
 }
+    
         
   

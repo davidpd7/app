@@ -12,7 +12,7 @@ def cfg_item(*items):
 
 class Config:
     
-    __config_json_path, __config_json_filename = "cubematchfinance.config", "config.json"
+    __config_json_path, __config_json_filename = "cubematchfinance.assets.config", "config.json"
     __instance = None
 
     @staticmethod

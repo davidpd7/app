@@ -6,12 +6,12 @@ from PyQt6.QtWidgets import (QMainWindow, QTextEdit, QMessageBox,
                             QFileDialog,QListWidgetItem, QApplication, QPushButton, QGridLayout, QTableWidget)
 
 
-from cubematchfinance.config.config import cfg_item
+from cubematchfinance.assets.config.config import cfg_item
 
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QTableWidget, QHBoxLayout, QRadioButton, QGridLayout, QComboBox
 
 class TabBase(QWidget):
-    def __init__(self, config_path):
+    def __init__(self, config_path) :
         super().__init__()
         self.config_path = config_path
         self.__name = cfg_item(*self.config_path, "name")
@@ -44,6 +44,9 @@ class TabBase(QWidget):
     def get_name(self):
 
         return self.__name
+
+    def get_buttons(self):
+        return self.__buttons
 
 class FirstTabApp(TabBase):
     def __init__(self):

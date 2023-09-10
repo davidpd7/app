@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (QMainWindow, QTextEdit, QMessageBox,
 from PyQt6.QtGui import QPixmap, QDesktopServices
 from pathlib import Path
 
-from cubematchfinance.config.config import cfg_item
+from cubematchfinance.assets.config.config import cfg_item
 import cubematchfinance.entities.tabs as tabs
 
 
@@ -42,17 +42,20 @@ class View(QMainWindow):
 
         self.__vlayout = QHBoxLayout()
         self.__central_widget.setLayout(self.__vlayout)
+
+
+        self.__render()
+        
+    def __render(self):
+         
         self.__create_and_add_tabs()
-        self.add_link_buttons()
+        self.__add_link_buttons()
 
-    
 
-    
     def __create_and_add_tabs(self):
 
         __tabs = QTabWidget()
         self.__vlayout.addWidget(__tabs)
-        self.__layout = QHBoxLayout()
         
         tabs_list = inspect.getmembers(tabs)
 
@@ -62,25 +65,40 @@ class View(QMainWindow):
                 __tabs.addTab(tab_instance, tab_instance.get_name())
     
 
-    def create_link_buttons(self, button, description):
+    def create_link_buttons(self, button, description, url):
             
         button = QPushButton()
         label = QLabel(description)
-        label.setAligment(Qt.AignCenter)
-        label.setStyleSheet("font-size:")
+      
+        label.setStyleSheet("font-size: 14px")
+        button.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(url)))
         return button, label
     
-    def add_link_buttons(self):
+    def __add_link_buttons(self):
             
             vbox = QVBoxLayout()
-            button_names = cfg_item("main", "push_buttons", "names")
-            self.__buttons_links = {}
+            button_names = cfg_item("main")
             self.__vlayout.addLayout(vbox)
 
             for name in button_names:
-                self.__buttons_links[name] = QPushButton(name)
-                self.__buttons_links[name].setFixedSize(100,20)
-                vbox.addWidget(self.__buttons_links[name])
+                icon_path = os.path.join(*cfg_item("main", name, "icon_path"))
+                url = cfg_item("main", name, "url")
+                description = cfg_item("main", name, "name")
+                button, label = self.create_link_buttons(icon_path, description, url)
+                vbox.addWidget(button)
+                vbox.addWidget(label)
+
+    def get_buttons(self):
+        buttons = {}
+        tabs_list = inspect.getmembers(tabs)
+
+        for name_object, object in tabs_list:
+            if inspect.isclass(object) and "TabApp" in name_object:
+                tab_instance = object()
+                buttons.update(tab_instance.get_buttons())
+        return buttons
+    
+
 
         
 
