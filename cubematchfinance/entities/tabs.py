@@ -22,6 +22,7 @@ class TabBase(QWidget):
     def __tab_widgets(self):
         self.__create_buttons()
         self.__create_table()
+      
 
     def __create_buttons(self):
         button_names = cfg_item(*self.config_path, "push_buttons", "names")
@@ -51,6 +52,7 @@ class TabBase(QWidget):
 class FirstTabApp(TabBase):
     def __init__(self):
         super().__init__(("tabs", 'tab1'))
+    
 
 class SecondTabApp(TabBase):
     def __init__(self):

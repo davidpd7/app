@@ -6,9 +6,16 @@ class Controller:
         self.__view = view
         self.__model = model
         self.__connect_signals()
-
+        self.get_buttons()
+        
     def __connect_signals(self):
         buttons = self.__view.get_buttons()
         for button, object in buttons.items():
             if "Browse" in button:
-                print(button)
+                pass
+                #object.clicked.connect(self.__model.showFileDialog)
+    
+    def get_buttons(self):
+        pass
+      
+    
