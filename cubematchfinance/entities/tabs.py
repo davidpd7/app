@@ -55,22 +55,19 @@ class SecondTabApp(TabBase):
 
 class ThirdTabApp(TabBase):
     def __init__(self):
-        self.__config_path = ("tabs", 'tab3')
-        super().__init__(self.__config_path)
-        
-        self.__create_check_buttons()
-        
+        super().__init__(("tabs", 'tab3'))
 
+      
     def __create_check_buttons(self):
 
-        button_names = cfg_item(*self.__config_path, "check_buttons", "names")
+        button_names = cfg_item(*ThirdTabApp.__config_path, "check_buttons", "names")
         buttons_layout = QHBoxLayout()
-        TabBase.__tab_layout.addLayout(buttons_layout)
+        self.__tab_layout.addLayout(buttons_layout)
         self.__check_buttons = {}
 
         for name in button_names:
             self.__check_buttons[name] = QRadioButton(name)
-            self.__check_buttons[name].setFixedSize(*cfg_item(*self.__config_path, "check_buttons", "names"))
+            self.__check_buttons[name].setFixedSize(*cfg_item(*ThirdTabApp.__config_path, "check_buttons", "size"))
             buttons_layout.addWidget(self.__check_buttons[name])
 
 
