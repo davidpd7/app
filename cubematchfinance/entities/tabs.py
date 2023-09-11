@@ -26,14 +26,15 @@ class TabBase(QWidget):
 
     def __create_buttons(self):
         button_names = cfg_item(*self.config_path, "push_buttons", "names")
+        positions = cfg_item(*self.config_path, "push_buttons", "pos")
         self.buttons_layout = QGridLayout()
         self.tab_layout.addLayout(self.buttons_layout)
         self.__buttons = {}
 
-        for name in button_names:
+        for name, pos in zip(button_names, positions):
             self.__buttons[name] = QPushButton(name)
             self.__buttons[name].setFixedSize(*cfg_item(*self.config_path, "push_buttons", "size"))
-            self.buttons_layout.addWidget(self.__buttons[name])
+            self.buttons_layout.addWidget(self.__buttons[name], *pos)
 
     def __create_table(self):
         table_layout = QHBoxLayout()

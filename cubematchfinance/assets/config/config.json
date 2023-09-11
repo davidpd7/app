@@ -45,15 +45,23 @@
             "name" : "Timesheets",
             "push_buttons":{
                 "names": ["Browse","Rename"],
-                "size": [100,40]
+                "size": [100,40],
+                "pos":[[0,1],
+                        [1,1]
+                       ]
             }
                 
         },
         "tab2": {
             "name": "Sales Invoices",
             "push_buttons":{
-               "names":["Browse","Raname"],
-               "size": [100,40]
+               "names":["Browse"
+               ,"Split"
+               ,"Rename"],
+               "size": [100,40],
+               "pos":[[0,0],
+                        [0,1],
+                        [0,2]]
             }
         },
         "tab3": {
@@ -62,12 +70,14 @@
                 "names":["Browse Invoices", 
                             "Browse Purchase Book", 
                             "Rename"],
-                "size": [150,40]},
+                "size": [150,40],
+                "pos":[[0,1],
+                        [1,1],
+                        [2,1]]},
             "check_buttons": 
             {
                 "names":["Other Invoices", 
                             "Contractor Invoices", 
-
                             "Non-contractor Invoices"],
                 "size": [150,50],
                 "pos":[[0,2],
@@ -80,16 +90,21 @@
             "push_buttons":{
                 "names":["Browse PDF Salaries File",
                         "Extract Salaries"],
-                "size": [150,40]
+                "size": [150,40],
+                "pos":[[0,1],
+                        [1,1]]
+                
             }
         },
         "tab5": {
-            "name" : "Clarity",
+            "name" : "BOI Clarity",
             "push_buttons" : {
                "names":["Browse Clarity Extract",
                             "Extract Clarity Details"],
 
-                "size": [150,40]}
+                "size": [150,40],
+                "pos":[[0,1],
+                        [1,1]]}
 
         }
         }

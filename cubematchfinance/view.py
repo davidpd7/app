@@ -50,21 +50,23 @@ class View(QMainWindow):
          
         self.__create_and_add_tabs()
         self.__add_link_buttons()
+        self.get_buttons()
 
 
     def __create_and_add_tabs(self):
-
         __tabs = QTabWidget()
         self.__vlayout.addWidget(__tabs)
         
         tabs_list = inspect.getmembers(tabs)
+        self.tab_instances = {} 
 
         for name_object, object in tabs_list:
             if inspect.isclass(object) and "TabApp" in name_object:
                 tab_instance = object()
+                self.tab_instances[name_object] = tab_instance  
                 __tabs.addTab(tab_instance, tab_instance.get_name())
     
-
+                
     def create_link_buttons(self, button, description, url):
             
         button = QPushButton()
@@ -87,16 +89,13 @@ class View(QMainWindow):
                 button, label = self.create_link_buttons(icon_path, description, url)
                 vbox.addWidget(button)
                 vbox.addWidget(label)
-
+        
     def get_buttons(self):
         buttons = {}
-        tabs_list = inspect.getmembers(tabs)
-
-        for name_object, object in tabs_list:
-            if inspect.isclass(object) and "TabApp" in name_object:
-                tab_instance = object()
-                buttons.update(tab_instance.get_buttons())
+        for name, tab_instance in self.tab_instances.items():
+            buttons[name] = tab_instance.get_buttons()
         return buttons
+
     
 
 
