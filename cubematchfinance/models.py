@@ -21,7 +21,6 @@ class Model:
         self.tab4 = self.Tab4(self)
         self.tab5 = self.Tab5(self)
 
-
     def sanitize_filename(self, filename):
         return re.sub(r'[<>:"/\\|?*]', '', filename)
 
@@ -148,11 +147,8 @@ class Model:
             self.parent = parent
         
         def browse(self, button):
-            self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
-        
-        def browse(self, button):
-            self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
-
+            self.fileName, _ = QFileDialog.getOpenFileNames(None, 'Open File')
+    
         def docxtopdf(self, file):
             try:
                 files_path = os.path.dirname(file)
@@ -165,10 +161,21 @@ class Model:
                 return pdf_path
             except Exception as e:
                 error_message = f"An error occurred while converting to .pdf: {str(e)}"
+        
+        def extract_pb(self):
+            self.pb, _ = QFileDialog.getOpenFileNames(None, 'Open File')
+            try: 
+                pb = pd.read_excel(self.pb[0])
+                return pb
+            except Exception as e:
+                error_message = f"An error occurred extracting Purchase Book: {str(e)}"
+            print(error_message)
 
         def renaming_contractors(self, files):
             pb = self.extract_pb()
+            files = self.converter()
             for file in files:
+                print(file)
                 old_path = os.path.dirname(file)
                 try:
                     full_name = os.path.basename(file)
@@ -181,7 +188,27 @@ class Model:
                         os.rename(file, new_path)
                 except Exception as e:
                     error_message = f"An error occurred while renaming: {str(e)}"
+        
+        def renaming_noncontractors_other(self, files):
+            files = self.converter()
+            old_path = os.path.dirname(files[0])
+            try:
+                for file in files:
+                    new_name = self.__set_name_non_contractors(file)
+                    new_path = os.path.join(old_path, new_name)
+                    os.rename(file, new_path)
+            except Exception as e:
+                error_message = f"An error occurred while renaming: {str(e)}"
+        
 
+        def converter(self):
+            new_file_names = []
+            for file in self.fileName:
+                if file.endswith('.docx'):
+                    file = self.docxtopdf(file)
+                new_file_names.append(file)
+            return new_file_names
+                    
         def __trim_str(self, company, pb):
             company_trim = company.lower().replace(" ", "")
             pb_trim = pb.iloc[:, 0].str.lower().str.replace(" ", "").values
@@ -194,22 +221,20 @@ class Model:
             new_name = self.parent.sanitize_filename(new_name)
             return new_name
 
-        def renaming_noncontractors_other(self, files):
-            old_path = os.path.dirname(files[0])
-            try:
-                for file in files:
-                    new_name = self.__set_name_non_contractors(file)
-                    new_path = os.path.join(old_path, new_name)
-                    os.rename(file, new_path)
-            except Exception as e:
-                error_message = f"An error occurred while renaming: {str(e)}"
 
-        def __set_name_non_contractors(self, file):
-            full_name = os.path.basename(file)
+
+        def set_name_non_contractors(self, file_path):
+
+         
+            full_name = os.path.basename(file_path)
             company_name = full_name.split('_')[0]
-            date = pd.to_datetime(full_name.split('_')[1])
-            new_name = f'{company_name} - {str(date.month_name())} {date.year}.pdf'
+            date_str = full_name.split('_')[1]
+            date = pd.to_datetime(date_str)
+            formatted_date = f'{date.strftime("%B")} {date.year}'
+            new_name = f'{company_name} - {formatted_date}.pdf'
+
             return new_name
+
         
     class Tab4:
 

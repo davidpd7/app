@@ -43,15 +43,12 @@ class View(QMainWindow):
         self.__vlayout = QHBoxLayout()
         self.__central_widget.setLayout(self.__vlayout)
 
-
         self.__render()
         
     def __render(self):
          
         self.__create_and_add_tabs()
         self.__add_link_buttons()
-        self.get_buttons()
-
 
     def __create_and_add_tabs(self):
         __tabs = QTabWidget()
@@ -90,11 +87,24 @@ class View(QMainWindow):
                 vbox.addWidget(button)
                 vbox.addWidget(label)
         
-    def get_buttons(self):
-        buttons = {}
+    def get_pushbuttons(self):
+        pushbuttons = {}
         for name, tab_instance in self.tab_instances.items():
-            buttons[name] = tab_instance.get_buttons()
-        return buttons
+            pushbuttons[name] = tab_instance.get_pushbuttons()
+        return pushbuttons
+
+
+    def get_checkbuttons(self):
+        checkbuttons = {}
+        for name, tab_instance in self.tab_instances.items():
+            try:
+                tab_instance.get_checkbuttons()
+                checkbuttons[name] = tab_instance.get_checkbuttons()
+            except AttributeError:
+                pass
+        return checkbuttons
+
+
 
     
 

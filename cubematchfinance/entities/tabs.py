@@ -29,12 +29,12 @@ class TabBase(QWidget):
         positions = cfg_item(*self.config_path, "push_buttons", "pos")
         self.buttons_layout = QGridLayout()
         self.tab_layout.addLayout(self.buttons_layout)
-        self.__buttons = {}
+        self.__pushbuttons = {}
 
         for name, pos in zip(button_names, positions):
-            self.__buttons[name] = QPushButton(name)
-            self.__buttons[name].setFixedSize(*cfg_item(*self.config_path, "push_buttons", "size"))
-            self.buttons_layout.addWidget(self.__buttons[name], *pos)
+            self.__pushbuttons[name] = QPushButton(name)
+            self.__pushbuttons[name].setFixedSize(*cfg_item(*self.config_path, "push_buttons", "size"))
+            self.buttons_layout.addWidget(self.__pushbuttons[name], *pos)
 
     def __create_table(self):
         table_layout = QHBoxLayout()
@@ -47,8 +47,8 @@ class TabBase(QWidget):
 
         return self.__name
 
-    def get_buttons(self):
-        return self.__buttons
+    def get_pushbuttons(self):
+        return self.__pushbuttons
 
 class FirstTabApp(TabBase):
     def __init__(self):
@@ -67,11 +67,14 @@ class ThirdTabApp(TabBase):
     def __create_check_buttons(self):
         names = cfg_item(*self.config_path, "check_buttons", "names")
         positions = cfg_item(*self.config_path, "check_buttons", "pos")
-        self.__check_buttons = {}   
+        self.__checkbuttons = {}   
         for name, pos in zip(names, positions):
-                self.__check_buttons[name] = QRadioButton(name)
-                self.__check_buttons[name].setFixedSize(*cfg_item(*self.config_path, "check_buttons", "size"))
-                self.buttons_layout.addWidget(self.__check_buttons[name], *pos)
+                self.__checkbuttons[name] = QRadioButton(name)
+                self.__checkbuttons[name].setFixedSize(*cfg_item(*self.config_path, "check_buttons", "size"))
+                self.buttons_layout.addWidget(self.__checkbuttons[name], *pos)
+    
+    def get_checkbuttons(self):
+        return self.__checkbuttons
 
 class FourthTabApp(TabBase):
     def __init__(self):
