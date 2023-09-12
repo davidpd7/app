@@ -1,10 +1,6 @@
-
-
-from PyQt6.QtWidgets import (QMainWindow, QTextEdit, QMessageBox, 
-                             QWidget, QHBoxLayout, QVBoxLayout,
-                             QTabWidget, QRadioButton, QLabel, QListWidget,
-                            QFileDialog,QListWidgetItem, QApplication, QPushButton, QGridLayout, QTableWidget)
-
+from PyQt6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout,
+                              QRadioButton,
+                             QPushButton, QGridLayout, QTableWidget)
 
 from cubematchfinance.assets.config.config import cfg_item
 
@@ -34,6 +30,7 @@ class TabBase(QWidget):
         for name, pos in zip(button_names, positions):
             self.__pushbuttons[name] = QPushButton(name)
             self.__pushbuttons[name].setFixedSize(*cfg_item(*self.config_path, "push_buttons", "size"))
+            self.__pushbuttons[name].setStyleSheet(self.__css_style(cfg_item('main','button_style')))
             self.buttons_layout.addWidget(self.__pushbuttons[name], *pos)
 
     def __create_table(self):
@@ -42,6 +39,12 @@ class TabBase(QWidget):
         table = QTableWidget()
         table.setColumnCount(4)
         table_layout.addWidget(table)
+
+    def __css_style(self, styles_data):
+        css_style = ""
+        for key, value in styles_data.items():
+            css_style += f"{key}: {value}; "
+        return css_style
 
     def get_name(self):
 

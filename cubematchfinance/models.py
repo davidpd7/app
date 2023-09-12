@@ -1,8 +1,7 @@
 import os
-from pathlib import Path
 import re
 
-from PyQt6.QtWidgets  import QFileDialog
+from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
 import PyPDF2
 import pdfplumber
@@ -22,12 +21,27 @@ class Model:
         self.tab5 = self.Tab5(self)
 
     def sanitize_filename(self, filename):
+
         return re.sub(r'[<>:"/\\|?*]', '', filename)
 
     def browse_buttons(self, button):
-        self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
-    
 
+        self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+
+    def rename(self, old_path, new_path):
+
+        if os.path.exists(new_path):
+            message = "Already exist"
+            QMessageBox.critical(None, "Error", error_message)
+        else:
+            try:
+                os.rename(src=old_path, dst=new_path)
+                message = "Renaming successfully done"
+                QMessageBox.critical(None, "Error", error_message)
+            except Exception as e:
+                error_message = f"An error occurred while renaming file: {str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
+    
 
     class Tab1:
 
@@ -35,32 +49,39 @@ class Model:
             self.parent = parent
         
         def browse(self, button):
-            self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+
+            try:
+                self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+            except Exception as e:
+                error_message = f"An error occurred while browsing files:\n{str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
 
         def renaming_timesheets(self):
+
             file_names = self.fileName
             for pdf in file_names:
                 folder_path = os.path.dirname(pdf)
                 if pdf.endswith('.pdf'):
-                    ruta_completa = pdf
-                    with pdfplumber.open(ruta_completa) as pdf:
-                        pages = pdf.pages
-                        pagina = pages[0]
-                        data = pagina.extract_text_lines()
-                        new_name = self.__set_name_timesheet(data)
-                        new_path_complete = os.path.join(folder_path, new_name)
-                        pdf.close()
-                        if os.path.exists(new_path_complete):
-                            message = f"File {new_name.replace(new_path_complete, '')} already exists. It will not be renamed."
-                            print(message)
-                        else:
-                            try:
-                                os.rename(src=ruta_completa, dst=new_path_complete)
-                                message = "Renaming successfully done"
-                            except Exception as e:
-                                error_message = f"An error occurred while renaming file: {str(e)}"
+                    old_path = pdf
+                    with pdfplumber.open(old_path) as pdf:
+                        self.__renaming(pdf, folder_path, old_path)
 
+        def __renaming(self, pdf, folder_path, old_path):
+
+            try:
+                pages = pdf.pages
+                pagina = pages[0]
+                data = pagina.extract_text_lines()
+                new_name = self.__set_name_timesheet(data)
+                new_path = os.path.join(folder_path, new_name)
+                pdf.close()
+                self.parent.rename(new_path, old_path)
+            except Exception as e:
+                    error_message = f"An error occurred while extracting info: {str(e)}"
+                    QMessageBox.critical(None, "Error", error_message)
+         
         def __set_name_timesheet(self, data):
+
             body = data[0]['text']
             name = data[1]['text'].split()[2:4]
             name = ' '.join(name)
@@ -82,8 +103,9 @@ class Model:
             self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
 
         def split_pdf(self):
+
             files = self.fileName[0]
-            self.parent.split_pdf_files = []
+            self.split_pdf_files = []
 
             files = os.path.abspath(files)
             folder_path = os.path.dirname(files)
@@ -98,58 +120,55 @@ class Model:
                     pdf_writer.add_page(pdf.pages[page_number])
                     output_file_name = f'page_{page_number + 1}.pdf'
                     output_file_path = os.path.join(output_dir, output_file_name).replace("\\\\", "\\")
-                    self.parent.split_pdf_files.append(output_file_path)
+                    self.split_pdf_files.append(output_file_path)
                     with open(output_file_path, 'wb') as output_file:
                         pdf_writer.write(output_file)
 
         def renaming_invoices(self):
+
             pdf_files = self.parent.split_pdf_files
             folder_path = os.path.dirname(pdf_files[0])
             for file in pdf_files:
                 if file.endswith('.pdf'):
-                    full_path = os.path.join(folder_path, file)
-                    with pdfplumber.open(full_path) as pdf:
+                    old_path = os.path.join(folder_path, file)
+                    with pdfplumber.open(old_path) as pdf:
                         page = pdf.pages[0].extract_tables()
+                        new_name = self.__set_name_sales_invoices(page)
+                        new_path = os.path.join(folder_path, new_name)
+                        pdf.close()
                         try:
-                            new_name = self.__set_name_sales_invoices(page)
-                            new_path = os.path.join(folder_path, new_name)
-                            pdf.close()
-                            if os.path.exists(new_path):
-                                message = f"File {new_name.replace(new_path, '')} already exists. It will not be renamed."
-                                print(message)
-                            else:
-                                try:
-                                    os.rename(src=full_path, dst=new_path)
-                                    message = "Renaming successfully done"
-                                    print(message)
-                                except Exception as e:
-                                    error_message = f"An error occurred while renaming file: {str(e)}"
-                                    print(error_message)
+                            self.parent.rename(new_path, old_path)
                         except Exception as e:
                             error_message = f"An error occurred while renaming the files: \n{str(e)}"
-                            print(error_message)
+                            QMessageBox.critical(None, "Error", error_message)
 
         def __set_name_sales_invoices(self, page):
-            invoice_number = page[0][2][1]
-            reference_number = page[0][3][1]
-            name = page[1][2][0].split()[:2]
-            name = ' '.join(name)
-            date = page[0][0][1][2:]
-            new_name = f"{invoice_number}.{reference_number} ({name}) - {date}.pdf"
-            new_name = self.parent.sanitize_filename(new_name)
-            return new_name
 
- 
-    
+            try:
+                invoice_number = page[0][2][1]
+                reference_number = page[0][3][1]
+                name = page[1][2][0].split()[:2]
+                name = ' '.join(name)
+                date = page[0][0][1][2:]
+                new_name = f"{invoice_number}.{reference_number} ({name}) - {date}.pdf"
+                new_name = self.parent.sanitize_filename(new_name)
+                return new_name
+            except Exception as e:
+                error_message = f"An error occurred while extracting info: {str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
+                            
+
     class Tab3:
 
         def __init__(self, parent):
             self.parent = parent
         
         def browse(self, button):
+
             self.fileName, _ = QFileDialog.getOpenFileNames(None, 'Open File')
     
-        def docxtopdf(self, file):
+        def __docxtopdf(self, file):
+
             try:
                 files_path = os.path.dirname(file)
                 nombre_archivo, extension = os.path.splitext(file)
@@ -161,17 +180,20 @@ class Model:
                 return pdf_path
             except Exception as e:
                 error_message = f"An error occurred while converting to .pdf: {str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
         
         def extract_pb(self):
+
             self.pb, _ = QFileDialog.getOpenFileNames(None, 'Open File')
             try: 
                 pb = pd.read_excel(self.pb[0])
                 return pb
             except Exception as e:
                 error_message = f"An error occurred extracting Purchase Book: {str(e)}"
-            print(error_message)
+                QMessageBox.critical(None, "Error", error_message)
 
         def renaming_contractors(self, files):
+
             pb = self.extract_pb()
             files = self.converter()
             for file in files:
@@ -188,10 +210,13 @@ class Model:
                         os.rename(file, new_path)
                 except Exception as e:
                     error_message = f"An error occurred while renaming: {str(e)}"
+                    QMessageBox.critical(None, "Error", error_message)
         
         def renaming_noncontractors_other(self, files):
-            files = self.converter()
-            old_path = os.path.dirname(files[0])
+            
+            if files:
+                files = self.__converter()
+                old_path = os.path.dirname(files[0])
             try:
                 for file in files:
                     new_name = self.__set_name_non_contractors(file)
@@ -199,32 +224,35 @@ class Model:
                     os.rename(file, new_path)
             except Exception as e:
                 error_message = f"An error occurred while renaming: {str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
         
 
-        def converter(self):
+        def __converter(self):
+
             new_file_names = []
             for file in self.fileName:
                 if file.endswith('.docx'):
-                    file = self.docxtopdf(file)
+                    file = self.__docxtopdf(file)
                 new_file_names.append(file)
             return new_file_names
                     
         def __trim_str(self, company, pb):
+            
             company_trim = company.lower().replace(" ", "")
             pb_trim = pb.iloc[:, 0].str.lower().str.replace(" ", "").values
             return company_trim, pb_trim
 
         def __find_contractor_name(self, pb, company, date):
-            contractor_name = pb.loc[pb.iloc[:, 0].str.lower().str.replace(" ", "") == company.lower().replace(" ", ""),
-                                     pb.columns[1]].values[0]
+            
+            mask = pb.iloc[:, 0].str.lower().str.replace(" ", "") == company.lower().replace(" ", ""),pb.columns[1]
+            contractor_name = pb.loc[mask].values[0]
             new_name = f"{company} ({contractor_name}) - {str(date.month_name())} {date.year}.pdf"
             new_name = self.parent.sanitize_filename(new_name)
+
             return new_name
 
 
-
         def set_name_non_contractors(self, file_path):
-
          
             full_name = os.path.basename(file_path)
             company_name = full_name.split('_')[0]
@@ -261,8 +289,8 @@ class Model:
                                 if fila[0].isdigit():
                                     self.information.append(fila)
             except Exception as e:
-
                 error_message =f"An error occurred while extracting PDF info:{str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
             return self.information
 
         def write_excel(self):
@@ -285,10 +313,9 @@ class Model:
                 
                 libro_excel.save(archivo_excel)
 
-    
             except Exception as e:
                 error_message =f"An error occurred while writing on Excel: {str(e)}"
-                print(error_message)
+                QMessageBox.critical(None, "Error", error_message)
 
 
     class Tab5:
@@ -296,15 +323,13 @@ class Model:
         def __init__(self, parent):
             self.parent = parent
 
-        
         def browse(self, button):
-            self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+            self.__fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
 
         def extract_clarity_details(self):
             exceptions = ['Weedle']
-            print(self.fileName)
             try:
-                file_names = self.fileName[0]
+                file_names = self.__fileName[0]
                 folder_path = os.path.dirname(file_names)
                 df = pd.read_excel(file_names, engine='pyxlsb', skiprows=1, index_col=0).dropna()
                 df.columns = df.iloc[df.index.get_loc('Resource ID')]
@@ -318,7 +343,7 @@ class Model:
                 df_result = df_result.merge(df_total_amount, on=['Contractor PO Number', 'Surname', 'First Name']).sort_values('Contractor PO Number')
             except Exception as e:
                 error_message =f"Error while extracting Clarity information: {str(e)}"
-                print(error_message)
+                QMessageBox.critical(None, "Error", error_message)
         
             else:
                 return df_result.to_excel(os.path.join(folder_path, 'Clarity Details.xlsx'), index=False)

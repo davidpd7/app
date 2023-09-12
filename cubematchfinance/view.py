@@ -3,14 +3,14 @@ import os
 import inspect
 
 from PyQt6 import QtGui
-from PyQt6.QtCore import QUrl, QSize, Qt
-from PyQt6.QtWidgets import (QMainWindow, QTextEdit, QMessageBox, 
+from PyQt6.QtCore import QUrl, QSize,Qt
+from PyQt6.QtWidgets import (QMainWindow,
                              QWidget, QHBoxLayout, QVBoxLayout,
-                             QTabWidget, QRadioButton, QLabel, QListWidget,
-                            QFileDialog,QListWidgetItem, QApplication, QPushButton, QGridLayout)
+                             QTabWidget, QLabel,
+                             QPushButton)
 
 from PyQt6.QtGui import QPixmap, QDesktopServices
-from pathlib import Path
+
 
 from cubematchfinance.assets.config.config import cfg_item
 import cubematchfinance.entities.tabs as tabs
@@ -18,30 +18,21 @@ import cubematchfinance.entities.tabs as tabs
 
 class View(QMainWindow):
      
-    __title = cfg_item("app","title")
-    __base_path = os.path.dirname(os.path.abspath(__file__))
-    icons_path = os.path.join(__base_path, "icons")
-    __app_icon_path = os.path.join(icons_path, "icon.png")
-    __width, __height, __left, __top  = (720, 720, 680, 240)
-    image_path = os.path.join(icons_path, "main_picture.png")
 
     def __init__(self):
 
         super().__init__()
         
-        self.setWindowIcon(QtGui.QIcon(View.__app_icon_path))
-        self.setWindowTitle(View.__title)
-
-        self.setGeometry(View.__left, 
-                         View.__top, 
-                         View.__width, 
-                         View.__height)
+        self.setWindowIcon(QtGui.QIcon(os.path.join(*cfg_item("app","icon_path"))))
+        self.setWindowTitle(cfg_item("app","title"))
+        self.setGeometry(*cfg_item("app", "geometry"))
         
         self.__central_widget = QWidget(self)
         self.setCentralWidget(self.__central_widget)
 
-        self.__vlayout = QHBoxLayout()
+        self.__vlayout = QHBoxLayout(self.__central_widget)
         self.__central_widget.setLayout(self.__vlayout)
+        self.label = QLabel(self)
 
         self.__render()
         
@@ -49,6 +40,14 @@ class View(QMainWindow):
          
         self.__create_and_add_tabs()
         self.__add_link_buttons()
+    
+    def __add_main_image(self):
+
+        self.pixmap = QPixmap(os.path.join(*cfg_item("app", "main_picture")))
+        scaled_pixmap = self.pixmap.scaled(self.label.size(), Qt.AspectRatioMode.KeepAspectRatio)
+        self.label.setPixmap(scaled_pixmap)
+        self.label.setMaximumSize(self.size())
+
 
     def __create_and_add_tabs(self):
         __tabs = QTabWidget()
@@ -64,35 +63,49 @@ class View(QMainWindow):
                 __tabs.addTab(tab_instance, tab_instance.get_name())
     
                 
-    def create_link_buttons(self, button, description, url):
+    def __create_link_buttons(self, button, description, url):
             
         button = QPushButton()
         label = QLabel(description)
-      
-        label.setStyleSheet("font-size: 14px")
+        icon_size = QSize(*cfg_item("main", "icon_size"))
+        button_size = QSize(*cfg_item("main", "button_size"))
+        style = self.__css_style(cfg_item('main','button_style'))
+        label.setStyleSheet(self.__css_style(cfg_item("main","label_style")))
         button.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(url)))
+        button.setIconSize(icon_size)
+        button.setFixedSize(button_size)
+        button.setStyleSheet(style)
+        
         return button, label
     
     def __add_link_buttons(self):
             
             vbox = QVBoxLayout()
-            button_names = cfg_item("main")
+            
+            button_names = cfg_item("main","push_buttons")
             self.__vlayout.addLayout(vbox)
 
             for name in button_names:
-                icon_path = os.path.join(*cfg_item("main", name, "icon_path"))
-                url = cfg_item("main", name, "url")
-                description = cfg_item("main", name, "name")
-                button, label = self.create_link_buttons(icon_path, description, url)
-                vbox.addWidget(button)
-                vbox.addWidget(label)
+                icon_path = os.path.join(*cfg_item("main","push_buttons", name, "icon_path"))
+                url = cfg_item("main","push_buttons", name, "url")
+                description = cfg_item("main","push_buttons", name, "name")
+                button, label = self.__create_link_buttons(icon_path, description, url)
+                button.setIcon(QtGui.QIcon(icon_path))
+                vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
+                vbox.addWidget(label, alignment=Qt.AlignmentFlag.AlignCenter)
+
+    
+    def __css_style(self, styles_data):
+        css_style = ""
+        for key, value in styles_data.items():
+            css_style += f"{key}: {value}; "
+        return css_style
         
     def get_pushbuttons(self):
         pushbuttons = {}
         for name, tab_instance in self.tab_instances.items():
             pushbuttons[name] = tab_instance.get_pushbuttons()
         return pushbuttons
-
 
     def get_checkbuttons(self):
         checkbuttons = {}
@@ -103,6 +116,8 @@ class View(QMainWindow):
             except AttributeError:
                 pass
         return checkbuttons
+    
+
 
 
 

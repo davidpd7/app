@@ -25,6 +25,7 @@ class Controller:
         rename_button = tab_path['Rename']
         browse_button.clicked.connect(functools.partial(self.__model.tab1.browse, browse_button))
         rename_button.clicked.connect(self.__model.tab1.renaming_timesheets)
+        
 
     def __connection_second_tab(self):
         tab_path = self.__pushbuttons['SecondTabApp']
@@ -35,6 +36,7 @@ class Controller:
         browse_button.clicked.connect(functools.partial(self.__model.tab2.browse, browse_button))
         split_button.clicked.connect(self.__model.tab2.split_pdf)
         rename_button.clicked.connect(self.__model.tab2.renaming_invoices)
+
 
     def __connection_third_tab(self):
         tab_path = self.__pushbuttons['ThirdTabApp']
@@ -59,7 +61,6 @@ class Controller:
         if check_button_noncontractor.isChecked() or check_button_other.isChecked():
             button.clicked.connect(self.__model.tab3.renaming_noncontractors_other)
            
-        
     
     def __connection_fourth_tab(self):
         tab_path = self.__pushbuttons['FourthTabApp']
@@ -68,6 +69,7 @@ class Controller:
         excel_writter_button = tab_path['Extract Salaries']
         browse_button.clicked.connect(functools.partial(self.__model.tab4.browse, browse_button))
         excel_writter_button.clicked.connect(self.__model.tab4.write_excel)
+
 
     def __connection_fifth_tab(self):
         tab_path = self.__pushbuttons['FifthTabApp']
