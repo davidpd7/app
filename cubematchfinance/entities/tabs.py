@@ -30,16 +30,17 @@ class TabBase(QWidget):
         for name, pos in zip(button_names, positions):
             self.__pushbuttons[name] = QPushButton(name)
             self.__pushbuttons[name].setFixedSize(*cfg_item(*self.config_path, "push_buttons", "size"))
-            self.__pushbuttons[name].setStyleSheet(self.__css_style(cfg_item('main','button_style')))
+            self.__pushbuttons[name].setStyleSheet(self.__css_style(cfg_item('view','button_style')))
             self.buttons_layout.addWidget(self.__pushbuttons[name], *pos)
 
     def __create_table(self):
         table_layout = QHBoxLayout()
         self.tab_layout.addLayout(table_layout)
-        table = QTableWidget()
-        table.setColumnCount(4)
-        table_layout.addWidget(table)
-
+        self.__tables = {}
+        table_name = cfg_item(*self.config_path, "tables", "names")
+        self.__tables[table_name] = QTableWidget()
+        self.tab_layout.addWidget(self.__tables[table_name])
+ 
     def __css_style(self, styles_data):
         css_style = ""
         for key, value in styles_data.items():
@@ -52,6 +53,9 @@ class TabBase(QWidget):
 
     def get_pushbuttons(self):
         return self.__pushbuttons
+    
+    def get_tables(self):
+        return self.__tables
 
 class FirstTabApp(TabBase):
     def __init__(self):

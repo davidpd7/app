@@ -1,6 +1,6 @@
 pdfplumber
 PyPDF2
-PyQt5
+PyQt6
 pandas
 pyxlsb
 openpyxl

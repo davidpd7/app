@@ -3,3 +3,10 @@ Name: CubeMatch
 Version: 0.1
 Author: David Perez
 Author-email: david.perez@cubematch.com
+Requires-Dist: pdfplumber
+Requires-Dist: PyPDF2
+Requires-Dist: PyQt6
+Requires-Dist: pandas
+Requires-Dist: pyxlsb
+Requires-Dist: openpyxl
+Requires-Dist: docx2pdf

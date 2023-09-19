@@ -24,23 +24,20 @@ class Model:
 
         return re.sub(r'[<>:"/\\|?*]', '', filename)
 
-    def browse_buttons(self, button):
-
-        self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
 
     def rename(self, old_path, new_path):
 
         if os.path.exists(new_path):
-            message = "Already exist"
-            QMessageBox.critical(None, "Error", error_message)
+            message = f"{new_path} Already exist"
+            QMessageBox.critical(None, "Error", message)
         else:
             try:
                 os.rename(src=old_path, dst=new_path)
                 message = "Renaming successfully done"
-                QMessageBox.critical(None, "Error", error_message)
+                QMessageBox.critical(None, "Error", message)
             except Exception as e:
-                error_message = f"An error occurred while renaming file: {str(e)}"
-                QMessageBox.critical(None, "Error", error_message)
+                message = f"An error occurred while renaming file: {str(e)}"
+                QMessageBox.critical(None, "Error", message)
     
 
     class Tab1:
@@ -164,8 +161,11 @@ class Model:
             self.parent = parent
         
         def browse(self, button):
-
-            self.fileName, _ = QFileDialog.getOpenFileNames(None, 'Open File')
+            try:
+                self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+            except Exception as e:
+                error_message = f"An error occurred while browsing files:\n{str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
     
         def __docxtopdf(self, file):
 
@@ -271,7 +271,11 @@ class Model:
             
         
         def browse(self, button):
-            self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+            try:
+                self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+            except Exception as e:
+                error_message = f"An error occurred while browsing files:\n{str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
         
        
         def salaries_extract(self):
@@ -292,6 +296,7 @@ class Model:
                 error_message =f"An error occurred while extracting PDF info:{str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
             return self.information
+        
 
         def write_excel(self):
             information = self.salaries_extract()
@@ -324,12 +329,16 @@ class Model:
             self.parent = parent
 
         def browse(self, button):
-            self.__fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+            try:
+                self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+            except Exception as e:
+                error_message = f"An error occurred while browsing files:\n{str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
 
         def extract_clarity_details(self):
             exceptions = ['Weedle']
             try:
-                file_names = self.__fileName[0]
+                file_names = self.fileName[0]
                 folder_path = os.path.dirname(file_names)
                 df = pd.read_excel(file_names, engine='pyxlsb', skiprows=1, index_col=0).dropna()
                 df.columns = df.iloc[df.index.get_loc('Resource ID')]

@@ -1,5 +1,10 @@
 import functools
 
+import pandas as pd
+
+df = pd.DataFrame({'Nombre': ['Alice', 'Bob', 'Charlie'],
+                           'Edad': [25, 30, 35]})
+
 class Controller:
 
     def __init__(self, view, model):
@@ -11,6 +16,7 @@ class Controller:
     def buttons_connection(self):
         self.__pushbuttons = self.__view.get_pushbuttons()
         self.__checkbuttons = self.__view.get_checkbuttons()
+        self.__tables = self.__view.get_tables()
 
         self.__connection_first_tab()
         self.__connection_second_tab()
@@ -77,8 +83,8 @@ class Controller:
         browse_button = tab_path['Browse Clarity Extract']
         extract_clarity_button = tab_path['Extract Clarity Details']
         browse_button.clicked.connect(functools.partial(self.__model.tab5.browse, browse_button))
-        extract_clarity_button.clicked.connect(self.__model.tab5.extract_clarity_details)
-
+        df = extract_clarity_button.clicked.connect(self.__model.tab5.extract_clarity_details)
+        print(df)
     
     
 

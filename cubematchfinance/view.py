@@ -26,6 +26,7 @@ class View(QMainWindow):
         self.setWindowIcon(QtGui.QIcon(os.path.join(*cfg_item("app","icon_path"))))
         self.setWindowTitle(cfg_item("app","title"))
         self.setGeometry(*cfg_item("app", "geometry"))
+        self.setMaximumSize(*cfg_item("app", "max_size"))
         
         self.__central_widget = QWidget(self)
         self.setCentralWidget(self.__central_widget)
@@ -67,10 +68,10 @@ class View(QMainWindow):
             
         button = QPushButton()
         label = QLabel(description)
-        icon_size = QSize(*cfg_item("main", "icon_size"))
-        button_size = QSize(*cfg_item("main", "button_size"))
-        style = self.__css_style(cfg_item('main','button_style'))
-        label.setStyleSheet(self.__css_style(cfg_item("main","label_style")))
+        icon_size = QSize(*cfg_item("view", "icon_size"))
+        button_size = QSize(*cfg_item("view", "button_size"))
+        style = self.__css_style(cfg_item('view','button_style'))
+        label.setStyleSheet(self.__css_style(cfg_item("view","label_style")))
         button.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(url)))
         button.setIconSize(icon_size)
         button.setFixedSize(button_size)
@@ -82,18 +83,17 @@ class View(QMainWindow):
             
             vbox = QVBoxLayout()
             
-            button_names = cfg_item("main","push_buttons")
+            button_names = cfg_item("view","push_buttons")
             self.__vlayout.addLayout(vbox)
 
             for name in button_names:
-                icon_path = os.path.join(*cfg_item("main","push_buttons", name, "icon_path"))
-                url = cfg_item("main","push_buttons", name, "url")
-                description = cfg_item("main","push_buttons", name, "name")
+                icon_path = os.path.join(*cfg_item("view","push_buttons", name, "icon_path"))
+                url = cfg_item("view","push_buttons", name, "url")
+                description = cfg_item("view","push_buttons", name, "name")
                 button, label = self.__create_link_buttons(icon_path, description, url)
                 button.setIcon(QtGui.QIcon(icon_path))
                 vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
                 vbox.addWidget(label, alignment=Qt.AlignmentFlag.AlignCenter)
-
     
     def __css_style(self, styles_data):
         css_style = ""
@@ -116,6 +116,16 @@ class View(QMainWindow):
             except AttributeError:
                 pass
         return checkbuttons
+    
+    def get_tables(self):
+        tables = {}
+        for name, tab_instance in self.tab_instances.items():
+            try:
+                tab_instance.get_tables()
+                tables[name] = tab_instance.get_tables()
+            except AttributeError:
+                pass
+        return tables
     
 
 
