@@ -33,8 +33,6 @@ class Model:
         else:
             try:
                 os.rename(src=old_path, dst=new_path)
-                message = "Renaming successfully done"
-                QMessageBox.critical(None, "Error", message)
             except Exception as e:
                 message = f"An error occurred while renaming file: {str(e)}"
                 QMessageBox.critical(None, "Error", message)
@@ -103,17 +101,16 @@ class Model:
 
             files = self.fileName[0]
             self.split_pdf_files = []
-
-            files = os.path.abspath(files)
             folder_path = os.path.dirname(files)
             output_dir = os.path.join(folder_path, 'Sales')
             os.makedirs(output_dir, exist_ok=True)
-            pdf_writer = PyPDF2.PdfWriter()
+            
 
             with open(files, 'rb') as file:
                 pdf = PyPDF2.PdfReader(file)
                 total_pages = len(pdf.pages)
                 for page_number in range(total_pages):
+                    pdf_writer = PyPDF2.PdfWriter()
                     pdf_writer.add_page(pdf.pages[page_number])
                     output_file_name = f'page_{page_number + 1}.pdf'
                     output_file_path = os.path.join(output_dir, output_file_name).replace("\\\\", "\\")
@@ -123,7 +120,7 @@ class Model:
 
         def renaming_invoices(self):
 
-            pdf_files = self.parent.split_pdf_files
+            pdf_files = self.split_pdf_files
             folder_path = os.path.dirname(pdf_files[0])
             for file in pdf_files:
                 if file.endswith('.pdf'):
@@ -133,11 +130,8 @@ class Model:
                         new_name = self.__set_name_sales_invoices(page)
                         new_path = os.path.join(folder_path, new_name)
                         pdf.close()
-                        try:
-                            self.parent.rename(new_path, old_path)
-                        except Exception as e:
-                            error_message = f"An error occurred while renaming the files: \n{str(e)}"
-                            QMessageBox.critical(None, "Error", error_message)
+                        self.parent.rename(old_path, new_path)
+                       
 
         def __set_name_sales_invoices(self, page):
 
@@ -248,12 +242,12 @@ class Model:
             print(existing_files)
             if new_name in existing_files:
                 base_name, extension = os.path.splitext(new_name)
-                new_name = f'{base_name} ({self.get_next_unique_number(existing_files)}){extension}'
+                new_name = f'{base_name} ({self.__get_next_unique_number(existing_files)}){extension}'
             
 
             return new_name
 
-        def get_next_unique_number(self, existing_files):
+        def __get_next_unique_number(self, existing_files):
             secuential_number = 1
     
             while True:
@@ -271,8 +265,8 @@ class Model:
             old_path = os.path.dirname(files[0])
             try:
                 for file in files:
-                    self.existing_files = os.listdir(old_path)
-                    new_name = self.set_name_non_contractors(file, self.existing_files)
+                    existing_files = os.listdir(old_path)
+                    new_name = self.set_name_non_contractors(file, existing_files)
                     new_path = os.path.join(old_path, new_name)
                     os.rename(file, new_path)
             except Exception as e:
@@ -342,7 +336,7 @@ class Model:
 
         def __init__(self, parent):
             self.parent = parent
-            self.df_result = None
+
 
         def browse(self, button):
             try:

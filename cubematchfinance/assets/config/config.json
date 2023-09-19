@@ -122,8 +122,17 @@
             "tables" : {
                 "names" : "table5"
             }       
+        },
+        "tab6": {
+            "name" : "Order Book",
+            "push_buttons" : {
+                "names":["Browse Clarity Extract","Extract Clarity Details", "Export Details"],
+                 "size": [170,40],
+                 "pos":[[0,0],[0,1],[0,2]]},
+            "tables" : {
+                    "names" : "table5"
+            }
         }
-    
     }
 
 }

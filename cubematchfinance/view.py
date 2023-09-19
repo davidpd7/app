@@ -103,7 +103,10 @@ class View(QMainWindow):
     def get_pushbuttons(self):
         pushbuttons = {}
         for name, tab_instance in self.tab_instances.items():
-            pushbuttons[name] = tab_instance.get_pushbuttons()
+            try:
+                pushbuttons[name] = tab_instance.get_pushbuttons()
+            except AttributeError:
+                pass
         return pushbuttons
 
     def get_checkbuttons(self):

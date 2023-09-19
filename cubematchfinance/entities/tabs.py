@@ -91,3 +91,7 @@ class FifthTabApp(TabBase):
     def __init__(self):
         super().__init__(("tabs", 'tab5'))
 
+
+class SixthTabApp(TabBase):
+    def __init__(self):
+        super().__init__(("tabs", 'tab6'))
