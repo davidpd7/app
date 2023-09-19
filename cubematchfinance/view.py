@@ -26,7 +26,6 @@ class View(QMainWindow):
         self.setWindowIcon(QtGui.QIcon(os.path.join(*cfg_item("app","icon_path"))))
         self.setWindowTitle(cfg_item("app","title"))
         self.setGeometry(*cfg_item("app", "geometry"))
-        self.setMaximumSize(*cfg_item("app", "max_size"))
         
         self.__central_widget = QWidget(self)
         self.setCentralWidget(self.__central_widget)

@@ -197,7 +197,6 @@ class Model:
             pb = self.extract_pb()
             files = self.converter()
             for file in files:
-                print(file)
                 old_path = os.path.dirname(file)
                 try:
                     full_name = os.path.basename(file)
@@ -212,20 +211,7 @@ class Model:
                     error_message = f"An error occurred while renaming: {str(e)}"
                     QMessageBox.critical(None, "Error", error_message)
         
-        def renaming_noncontractors_other(self, files):
-            
-            if files:
-                files = self.__converter()
-                old_path = os.path.dirname(files[0])
-            try:
-                for file in files:
-                    new_name = self.__set_name_non_contractors(file)
-                    new_path = os.path.join(old_path, new_name)
-                    os.rename(file, new_path)
-            except Exception as e:
-                error_message = f"An error occurred while renaming: {str(e)}"
-                QMessageBox.critical(None, "Error", error_message)
-        
+    
 
         def __converter(self):
 
@@ -252,16 +238,46 @@ class Model:
             return new_name
 
 
-        def set_name_non_contractors(self, file_path):
-         
+        def set_name_non_contractors(self, file_path, existing_files):
             full_name = os.path.basename(file_path)
             company_name = full_name.split('_')[0]
             date_str = full_name.split('_')[1]
             date = pd.to_datetime(date_str)
             formatted_date = f'{date.strftime("%B")} {date.year}'
             new_name = f'{company_name} - {formatted_date}.pdf'
+            print(existing_files)
+            if new_name in existing_files:
+                base_name, extension = os.path.splitext(new_name)
+                new_name = f'{base_name} ({self.get_next_unique_number(existing_files)}){extension}'
+            
 
             return new_name
+
+        def get_next_unique_number(self, existing_files):
+            secuential_number = 1
+    
+            while True:
+                candidate = secuential_number
+                if not any(f"_ {candidate}" in file for file in existing_files):
+                    return candidate
+                secuential_number += 1
+           
+        
+
+        def renaming_noncontractors_other(self, files):
+         
+            files = self.__converter()
+
+            old_path = os.path.dirname(files[0])
+            try:
+                for file in files:
+                    self.existing_files = os.listdir(old_path)
+                    new_name = self.set_name_non_contractors(file, self.existing_files)
+                    new_path = os.path.join(old_path, new_name)
+                    os.rename(file, new_path)
+            except Exception as e:
+                error_message = f"An error occurred while renaming: {str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
 
         
     class Tab4:
@@ -301,7 +317,6 @@ class Model:
         def write_excel(self):
             information = self.salaries_extract()
             try:
-                information = self.salaries_extract()
     
                 libro_excel, _ = QFileDialog.getOpenFileNames(None, "Select Files", r"C:\\")
                 archivo_excel = libro_excel[0]
@@ -327,6 +342,7 @@ class Model:
 
         def __init__(self, parent):
             self.parent = parent
+            self.df_result = None
 
         def browse(self, button):
             try:
@@ -339,7 +355,7 @@ class Model:
             exceptions = ['Weedle']
             try:
                 file_names = self.fileName[0]
-                folder_path = os.path.dirname(file_names)
+                self.folder_path = os.path.dirname(file_names)
                 df = pd.read_excel(file_names, engine='pyxlsb', skiprows=1, index_col=0).dropna()
                 df.columns = df.iloc[df.index.get_loc('Resource ID')]
                 df = df.iloc[1:]
@@ -349,13 +365,17 @@ class Model:
                 df_total_horas.loc[~exceptions, 'Total Days'] = df_total_horas.loc[~exceptions, 'Sum of Hours'] / 8
                 df_result = df_total_horas.sort_values('Contractor PO Number')
                 df_total_amount = df.groupby(['Contractor PO Number', 'Surname', 'First Name']).agg({'Sum of Total': 'sum'}).reset_index()
-                df_result = df_result.merge(df_total_amount, on=['Contractor PO Number', 'Surname', 'First Name']).sort_values('Contractor PO Number')
+                self.df_result = df_result.merge(df_total_amount, on=['Contractor PO Number', 'Surname', 'First Name']).sort_values('Contractor PO Number')
             except Exception as e:
                 error_message =f"Error while extracting Clarity information: {str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
         
             else:
-                return df_result.to_excel(os.path.join(folder_path, 'Clarity Details.xlsx'), index=False)
-
-
-
+                return  self.df_result
+        
+        def export_clarity_to_excel(self):
+            try:
+                self.df_result.to_excel(os.path.join(self.folder_path, "Clarity Details.xlsx"), index = False)
+            except Exception as e:
+                error_message =f"Error while exporting Clarity information: {str(e)}"
+                QMessageBox.critical(None, "Error", error_message)

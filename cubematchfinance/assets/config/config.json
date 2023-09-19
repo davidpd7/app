@@ -3,7 +3,6 @@
         "title": "CubeMatch Finance",
         "icon_path": ["cubematchfinance", "assets","images","icon.png"],
         "geometry" : [720, 480, 720, 480],
-        "max_size" : [640, 640],
         "main_picture":["cubematchfinance", "assets","images","main_picture.png"]
             
     },
@@ -105,9 +104,9 @@
         "tab4": {
             "name" : "Salary File (CMBV)",
             "push_buttons":{
-                "names":["Browse PDF Salaries File","Extract Salaries"],
+                "names":["Browse PDF Salaries File","Extract Salaries","Export Salaries"],
                 "size": [170,40],
-                "pos":[[0,0],[0,1]]
+                "pos":[[0,0],[0,1], [0,2]]
             },
             
             "tables" : {
@@ -117,9 +116,9 @@
         "tab5": {
             "name" : "BOI Clarity",
             "push_buttons" : {
-               "names":["Browse Clarity Extract","Extract Clarity Details"],
+               "names":["Browse Clarity Extract","Extract Clarity Details", "Export Details"],
                 "size": [170,40],
-                "pos":[[0,0],[0,1]]},
+                "pos":[[0,0],[0,1],[0,2]]},
             "tables" : {
                 "names" : "table5"
             }       

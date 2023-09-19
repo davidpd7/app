@@ -2,8 +2,8 @@ import functools
 
 import pandas as pd
 
-df = pd.DataFrame({'Nombre': ['Alice', 'Bob', 'Charlie'],
-                           'Edad': [25, 30, 35]})
+from PyQt6.QtWidgets import  QTableWidgetItem
+
 
 class Controller:
 
@@ -17,6 +17,7 @@ class Controller:
         self.__pushbuttons = self.__view.get_pushbuttons()
         self.__checkbuttons = self.__view.get_checkbuttons()
         self.__tables = self.__view.get_tables()
+
 
         self.__connection_first_tab()
         self.__connection_second_tab()
@@ -66,15 +67,33 @@ class Controller:
             
         if check_button_noncontractor.isChecked() or check_button_other.isChecked():
             button.clicked.connect(self.__model.tab3.renaming_noncontractors_other)
-           
+
     
     def __connection_fourth_tab(self):
         tab_path = self.__pushbuttons['FourthTabApp']
     
         browse_button = tab_path['Browse PDF Salaries File']
-        excel_writter_button = tab_path['Extract Salaries']
+        extract_salaries_button = tab_path['Extract Salaries']
+        export_salaries_button = tab_path["Export Salaries"]
+
         browse_button.clicked.connect(functools.partial(self.__model.tab4.browse, browse_button))
-        excel_writter_button.clicked.connect(self.__model.tab4.write_excel)
+        extract_salaries_button.clicked.connect(self.__get_list_fourth_tab)
+        export_salaries_button.clicked.connect(self.__model.tab4.write_excel)
+    
+    def __get_list_fourth_tab(self):
+
+        data =  self.__model.tab4.salaries_extract()
+        table = self.__tables['FourthTabApp']['table4']
+        num_rows = len(data)
+        num_columns = len(data[0]) if data else 0
+
+        table.setRowCount(num_rows)
+        table.setColumnCount(num_columns)
+
+        for row_idx, row_data in enumerate(data):
+            for col_idx, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                table.setItem(row_idx, col_idx, item)
 
 
     def __connection_fifth_tab(self):
@@ -82,9 +101,29 @@ class Controller:
     
         browse_button = tab_path['Browse Clarity Extract']
         extract_clarity_button = tab_path['Extract Clarity Details']
+        export_clarity_button = tab_path['Export Details']
         browse_button.clicked.connect(functools.partial(self.__model.tab5.browse, browse_button))
-        df = extract_clarity_button.clicked.connect(self.__model.tab5.extract_clarity_details)
-        print(df)
+        extract_clarity_button.clicked.connect(self.__get_dataframe_from_fifth_tab)
+        export_clarity_button.clicked.connect(self.__model.tab5.export_clarity_to_excel)
+        
+    def __get_dataframe_from_fifth_tab(self):
+
+        data = self.__model.tab5.extract_clarity_details()
+        table = self.__tables['FifthTabApp']['table5']
+        columns_names = data.columns.to_list()
+        rows, cols = data.shape
+        if data is not None:
+            table.setRowCount(rows)
+            table.setColumnCount(cols)
+            table.setHorizontalHeaderLabels(columns_names)
+
+            for row in range(rows):
+                for col in range(cols):
+                    item = QTableWidgetItem(str(data.iat[row, col]))
+                    table.setItem(row, col, item)
+                
+            
+    
     
     
 
