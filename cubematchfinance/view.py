@@ -40,13 +40,6 @@ class View(QMainWindow):
          
         self.__create_and_add_tabs()
         self.__add_link_buttons()
-    
-    def __add_main_image(self):
-
-        self.pixmap = QPixmap(os.path.join(*cfg_item("app", "main_picture")))
-        scaled_pixmap = self.pixmap.scaled(self.label.size(), Qt.AspectRatioMode.KeepAspectRatio)
-        self.label.setPixmap(scaled_pixmap)
-        self.label.setMaximumSize(self.size())
 
 
     def __create_and_add_tabs(self):
