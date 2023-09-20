@@ -19,6 +19,7 @@ class Model:
         self.tab3 = self.Tab3(self)
         self.tab4 = self.Tab4(self)
         self.tab5 = self.Tab5(self)
+        self.tab6 = self.Tab6(self)
 
     def sanitize_filename(self, filename):
 
@@ -41,6 +42,7 @@ class Model:
     class Tab1:
 
         def __init__(self, parent):
+
             self.parent = parent
         
         def browse(self, button):
@@ -91,6 +93,7 @@ class Model:
     class Tab2:
 
         def __init__(self, parent):
+
             self.parent = parent
             self.fileName = []
             self.split_pdf_files = []
@@ -144,7 +147,6 @@ class Model:
                 error_message = f"An error occurred while renaming files:\n{str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
 
-                       
 
         def __set_name_sales_invoices(self, page):
 
@@ -165,6 +167,7 @@ class Model:
     class Tab3:
 
         def __init__(self, parent):
+
             self.parent = parent
         
         def browse(self, button):
@@ -306,10 +309,11 @@ class Model:
                         error_message = f"An error occurred while renaming: {str(e)}"
                         QMessageBox.critical(None, "Error", error_message)
 
-        
+
     class Tab4:
 
         def __init__(self, parent):
+
             self.parent = parent
             
         def browse(self, button):
@@ -319,7 +323,6 @@ class Model:
                 error_message = f"An error occurred while browsing files:\n{str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
         
-       
         def salaries_extract(self):
             self.information = []
             try:
@@ -338,7 +341,6 @@ class Model:
                 error_message =f"An error occurred while extracting PDF info:{str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
             return self.information
-        
 
         def write_excel(self):
            
@@ -368,10 +370,11 @@ class Model:
     class Tab5:
 
         def __init__(self, parent):
+
             self.parent = parent
 
-
         def browse(self, button):
+
             try:
                 self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
             except Exception as e:
@@ -379,6 +382,7 @@ class Model:
                 QMessageBox.critical(None, "Error", error_message)
 
         def extract_clarity_details(self):
+
             exceptions = ['Weedle']
             try:
                 file_names = self.fileName[0]
@@ -406,3 +410,70 @@ class Model:
             except Exception as e:
                 error_message =f"Error while exporting Clarity information: {str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
+        
+    class Tab6:
+
+        def __init__(self, parent):
+
+            self.parent = parent
+            
+        
+        def browse(self):
+
+            try:
+                self.fileName, _ = QFileDialog.getOpenFileNames(None, 'Open File')
+            except Exception as e:
+
+                error_message = f"An error occurred while browsing files:\n{str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
+        
+        def assingorderbook(self):
+            
+            for name in self.fileName:
+                if "CMIRE" in name:
+                    self.IRE = pd.read_excel(name)
+                if "UK" in name:
+                    self.UK = pd.read_excel(name)
+                if "NL" in name:
+                    self.NL = pd.read_excel(name)
+        
+        def first_step(self):
+            IRE = IRE.loc[:, ~IRE.columns.str.startswith('Unnamed')]
+            UK = UK.loc[:, ~UK.columns.str.startswith('Unnamed')]
+            CMBV = CMBV.loc[:, ~CMBV.columns.str.startswith('Unnamed')]
+    
+        def second_step(self):
+            IRE.drop(labels=0, axis = 0, inplace= True)
+            UK.drop(labels=0, axis = 0, inplace= True)
+            CMBV.drop(labels=0, axis = 0, inplace= True)
+            IRE.drop(columns='Comments', inplace=True)
+            UK.drop(columns='Comments', inplace=True)
+            CMBV.drop(columns='Comments', inplace=True)
+        
+        def third_step(self):
+            columns_to_renameUK = {'Cost ': 'Cost Rate','Sale':'Sale Rate'}
+            columns_to_renameBV = {'Pay Rate': 'Cost Rate', 'Sale Rate/Fee':'Sale Rate'}
+
+            UK.rename(columns=columns_to_renameUK, inplace=True)
+            CMBV.rename(columns=columns_to_renameBV, inplace=True)
+        
+        def remove_estimations(data):
+            current_month = datetime.now().strftime(('%B'))
+            position_current_month = data.columns.get_loc(current_month)
+            data.iloc[:,position_current_month:] = np.nan
+
+        def fourth_step(self):
+            remove_estimations(IRE)
+            remove_estimations(UK)
+            remove_estimations(CMBV)
+                
+
+
+
+
+            
+        
+
+
+        
+

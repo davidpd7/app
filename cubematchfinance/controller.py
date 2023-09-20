@@ -24,9 +24,10 @@ class Controller:
         self.__connection_third_tab()
         self.__connection_fourth_tab()
         self.__connection_fifth_tab()
+        self.__connection_sixth_tab()
     
     def __connection_first_tab(self):
-        
+
         tab_path = self.__pushbuttons["FirstTabApp"]
 
         browse_button = tab_path["Browse"]
@@ -34,7 +35,6 @@ class Controller:
         browse_button.clicked.connect(functools.partial(self.__model.tab1.browse, browse_button))
         rename_button.clicked.connect(self.__model.tab1.renaming_timesheets)
         
-
     def __connection_second_tab(self):
 
         tab_path = self.__pushbuttons["SecondTabApp"]
@@ -45,7 +45,6 @@ class Controller:
         browse_button.clicked.connect(functools.partial(self.__model.tab2.browse, browse_button))
         split_button.clicked.connect(self.__model.tab2.split_pdf)
         rename_button.clicked.connect(self.__model.tab2.renaming_invoices)
-
 
     def __connection_third_tab(self):
 
@@ -60,7 +59,6 @@ class Controller:
         rename_button.clicked.connect(functools.partial(self.__execute_action, rename_button))
         open_purchasebook_button.clicked.connect(self.__get_dataframe_from_third_tab)
 
-        
     def __execute_action(self, button):
 
         check_buttons_path = self.__checkbuttons["ThirdTabApp"]
@@ -90,7 +88,6 @@ class Controller:
                 for col in range(cols):
                     item = QTableWidgetItem(str(data.iat[row, col]))
                     table.setItem(row, col, item)
-
     
     def __connection_fourth_tab(self):
 
@@ -120,7 +117,6 @@ class Controller:
                     item = QTableWidgetItem(str(cell_data))
                     table.setItem(row_idx, col_idx, item)
 
-
     def __connection_fifth_tab(self):
 
         tab_path = self.__pushbuttons["FifthTabApp"]
@@ -149,3 +145,16 @@ class Controller:
                 for col in range(cols):
                     item = QTableWidgetItem(str(data.iat[row, col]))
                     table.setItem(row, col, item)
+
+
+    def __connection_sixth_tab(self):
+
+        tab_path = self.__pushbuttons["SixthTabApp"]
+    
+        browse_button = tab_path["Browse Order Books"]
+        extract_clarity_button = tab_path["Extract Order Book"]
+        export_clarity_button = tab_path["Export Order Book"]
+        browse_button.clicked.connect(functools.partial(self.__model.tab6.browse))
+        extract_clarity_button.clicked.connect(self.__model.tab6.assingorderbook)
+    
+    

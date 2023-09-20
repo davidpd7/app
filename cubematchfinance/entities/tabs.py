@@ -7,7 +7,9 @@ from cubematchfinance.assets.config.config import cfg_item
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QTableWidget, QHBoxLayout, QRadioButton, QGridLayout, QComboBox
 
 class TabBase(QWidget):
+
     def __init__(self, config_path) :
+
         super().__init__()
         self.config_path = config_path
         self.__name = cfg_item(*self.config_path, "name")
@@ -58,16 +60,22 @@ class TabBase(QWidget):
         return self.__tables
 
 class FirstTabApp(TabBase):
+
     def __init__(self):
+
         super().__init__(("tabs", 'tab1'))
     
 
 class SecondTabApp(TabBase):
+
     def __init__(self):
+
         super().__init__(("tabs", 'tab2'))
 
 class ThirdTabApp(TabBase):
+
     def __init__(self):
+
         super().__init__(config_path=("tabs", 'tab3')) 
         self.__create_check_buttons()
         
@@ -90,7 +98,6 @@ class FourthTabApp(TabBase):
 class FifthTabApp(TabBase):
     def __init__(self):
         super().__init__(("tabs", 'tab5'))
-
 
 class SixthTabApp(TabBase):
     def __init__(self):

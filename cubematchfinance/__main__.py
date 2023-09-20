@@ -6,7 +6,6 @@ from cubematchfinance.view import View
 from cubematchfinance.controller import Controller
 from cubematchfinance.models import Model
 
-
 def main(args = None):
 
     app = QApplication(sys.argv)

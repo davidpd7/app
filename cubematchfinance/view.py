@@ -1,4 +1,3 @@
-import sys
 import os
 import inspect
 
@@ -9,7 +8,7 @@ from PyQt6.QtWidgets import (QMainWindow,
                              QTabWidget, QLabel,
                              QPushButton)
 
-from PyQt6.QtGui import QPixmap, QDesktopServices
+from PyQt6.QtGui import QDesktopServices
 
 
 from cubematchfinance.assets.config.config import cfg_item
