@@ -155,7 +155,7 @@ class Model:
                 name = page[1][2][0].split()[:2]
                 name = ' '.join(name)
                 date = page[0][0][1][2:]
-                new_name = f"{invoice_number}.{reference_number} ({name}) - {date}.pdf"
+                new_name = f"{invoice_number}.{reference_number} ({name}) -{date}.pdf"
                 new_name = self.parent.sanitize_filename(new_name)
                 return new_name
             except Exception as e:
@@ -432,7 +432,7 @@ class Model:
                     if "NL" in name:
                         self.NL = pd.read_excel(name, skiprows=3, skipfooter=6)
             except:
-                error_message = f"An error occurred while obtaining books"
+                error_message = f"An error occurred while obtaining books. Remember that books must not have password."
                 QMessageBox.critical(None, "Error", error_message)
                 
         def order_book_cleaner(self):
