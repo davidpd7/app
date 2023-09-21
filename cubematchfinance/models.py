@@ -11,7 +11,6 @@ import openpyxl
 import numpy as np
 from datetime import datetime
 
-
 class Model:
 
     def __init__(self):
@@ -27,7 +26,6 @@ class Model:
 
         return re.sub(r'[<>:"/\\|?*]', '', filename)
 
-
     def rename(self, old_path, new_path):
 
         if os.path.exists(new_path):
@@ -40,7 +38,6 @@ class Model:
                 message = f"An error occurred while renaming file: {str(e)}"
                 QMessageBox.critical(None, "Error", message)
     
-
     class Tab1:
 
         def __init__(self, parent):
@@ -165,7 +162,6 @@ class Model:
                 error_message = f"An error occurred while extracting info: {str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
                             
-
     class Tab3:
 
         def __init__(self, parent):
@@ -203,6 +199,7 @@ class Model:
                 QMessageBox.critical(None, "Error", error_message)
         
         def extract_purchasebook(self):
+
             try:
                 self.pb = pd.read_excel(self.pb[0])
                 return self.pb
@@ -215,9 +212,7 @@ class Model:
 
             pb = self.extract_purchasebook()
             if pb == None:
-
                 return
-
             files = self.__converter()
             for file in files:
                 old_path = os.path.dirname(file)
@@ -269,7 +264,6 @@ class Model:
 
             return new_name
 
-
         def __set_name_non_contractors(self, file_path, existing_files):
             full_name = os.path.basename(file_path)
             company_name = full_name.split('_')[0]
@@ -284,6 +278,7 @@ class Model:
             return new_name
 
         def __get_next_unique_number(self, existing_files):
+
             secuential_number = 1
     
             while True:
@@ -310,7 +305,6 @@ class Model:
                     except Exception as e:
                         error_message = f"An error occurred while renaming: {str(e)}"
                         QMessageBox.critical(None, "Error", error_message)
-
 
     class Tab4:
 
@@ -367,7 +361,6 @@ class Model:
             except Exception as e:
                 error_message =f"An error occurred while writing on Excel: {str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
-
 
     class Tab5:
 
@@ -453,7 +446,7 @@ class Model:
                 self.__sixth_step()
                 self.__seventh_step()
                 self.__eighth_step()
-                self.__nineth_step()
+                self.__ninth_step()
                 self.__tenth_step()
                 self.__index_creation()
                 return self.OB2023
@@ -468,7 +461,6 @@ class Model:
             except:
                 error_message = f"An error occurred while exporting book:\n"
                 QMessageBox.critical(None, "Error", error_message)
-
         
         def __first_step(self):
             self.IRE = self.IRE.loc[:, ~self.IRE.columns.str.startswith('Unnamed')]
@@ -499,7 +491,6 @@ class Model:
             self.__remove_estimations(self.IRE)
             self.__remove_estimations(self.UK)
             self.__remove_estimations(self.NL)
-
 
         def __fifth_step(self):
             self.IRE['Location'] = 'Ireland'
@@ -540,7 +531,7 @@ class Model:
                 self.NL[column].astype(float) 
                 self.NL[column] = self.NL[column]/8
         
-        def __nineth_step(self):
+        def __ninth_step(self):
             self.OB2023 = pd.concat([self.IRE, self.UK, self.NL])
             self.OB2023['Year'] = 2023
             self.OB2023['generation_date'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

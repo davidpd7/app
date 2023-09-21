@@ -1,23 +1,20 @@
 import functools
 
-import pandas as pd
-
 from PyQt6.QtWidgets import  QTableWidgetItem
-
 
 class Controller:
 
     def __init__(self, view, model):
+
         self.__view = view
         self.__model = model
         self.buttons_connection()
         
-
     def buttons_connection(self):
+
         self.__pushbuttons = self.__view.get_pushbuttons()
         self.__checkbuttons = self.__view.get_checkbuttons()
         self.__tables = self.__view.get_tables()
-
 
         self.__connection_first_tab()
         self.__connection_second_tab()
@@ -148,7 +145,6 @@ class Controller:
                     item = QTableWidgetItem(str(data.iat[row, col]))
                     table.setItem(row, col, item)
 
-
     def __connection_sixth_tab(self):
 
         tab_path = self.__pushbuttons["SixthTabApp"]
@@ -159,7 +155,6 @@ class Controller:
         browse_button.clicked.connect(functools.partial(self.__model.tab6.browse))
         extract_clarity_button.clicked.connect(self.__get_dataframe_from_sixth_tab)
         export_clarity_button.clicked.connect(self.__model.tab6.export_order_book)
-
 
     def __get_dataframe_from_sixth_tab(self):
         

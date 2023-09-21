@@ -3,21 +3,17 @@ import inspect
 
 from PyQt6 import QtGui
 from PyQt6.QtCore import QUrl, QSize,Qt
-from PyQt6.QtWidgets import (QMainWindow,
-                             QWidget, QHBoxLayout, QVBoxLayout,
-                             QTabWidget, QLabel,
+from PyQt6.QtWidgets import (QMainWindow,QWidget, QHBoxLayout, 
+                             QVBoxLayout,QTabWidget, QLabel,
                              QPushButton)
 
 from PyQt6.QtGui import QDesktopServices
 
-
 from cubematchfinance.assets.config.config import cfg_item
 import cubematchfinance.entities.tabs as tabs
 
-
 class View(QMainWindow):
      
-
     def __init__(self):
 
         super().__init__()

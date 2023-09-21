@@ -1,10 +1,12 @@
 from PyQt6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout,
-                              QRadioButton,
-                             QPushButton, QGridLayout, QTableWidget)
+                              QRadioButton,QPushButton, QGridLayout, 
+                              QTableWidget)
+
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, 
+                             QTableWidget, QHBoxLayout, QRadioButton, 
+                             QGridLayout)
 
 from cubematchfinance.assets.config.config import cfg_item
-
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QTableWidget, QHBoxLayout, QRadioButton, QGridLayout, QComboBox
 
 class TabBase(QWidget):
 
@@ -20,7 +22,6 @@ class TabBase(QWidget):
     def __tab_widgets(self):
         self.__create_buttons()
         self.__create_table()
-      
 
     def __create_buttons(self):
         button_names = cfg_item(*self.config_path, "push_buttons", "names")
@@ -50,7 +51,6 @@ class TabBase(QWidget):
         return css_style
 
     def get_name(self):
-
         return self.__name
 
     def get_pushbuttons(self):
@@ -65,7 +65,6 @@ class FirstTabApp(TabBase):
 
         super().__init__(("tabs", 'tab1'))
     
-
 class SecondTabApp(TabBase):
 
     def __init__(self):
@@ -92,13 +91,16 @@ class ThirdTabApp(TabBase):
         return self.__checkbuttons
 
 class FourthTabApp(TabBase):
+
     def __init__(self):
         super().__init__(("tabs", 'tab4'))
 
 class FifthTabApp(TabBase):
+
     def __init__(self):
         super().__init__(("tabs", 'tab5'))
 
 class SixthTabApp(TabBase):
+
     def __init__(self):
         super().__init__(("tabs", 'tab6'))
