@@ -6,8 +6,6 @@
         "main_picture":["cubematchfinance", "assets","images","main_picture.png"]
             
     },
-
-
     "view":{
         "button_style": {
             "background-color": "#ffffff",
@@ -99,7 +97,6 @@
                 
                 "names" : "table3"
             }
-
         },
         "tab4": {
             "name" : "Salary File (CMBV)",
