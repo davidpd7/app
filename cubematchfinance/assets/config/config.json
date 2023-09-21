@@ -1,7 +1,7 @@
 {   
     "app":{
         "title": "CubeMatch Finance",
-        "icon_path": ["cubematchfinance", "assets","images","icon.png"],
+        "icon_path": ["cubematchfinance", "assets","images","icon.ico"],
         "geometry" : [720, 480, 720, 480],
         "main_picture":["cubematchfinance", "assets","images","main_picture.png"]
             
