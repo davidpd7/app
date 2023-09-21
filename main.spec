@@ -1,22 +1,23 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 block_cipher = None
 
-
 import os
-import sys
 
-# ...
+# Nombre del archivo principal (__main__.py)
+main_script = 'cubematchfinance/__main__.py'
 
 a = Analysis(
-    ['cubematchfinance/__main__.py'], 
+    [main_script],
     pathex=[],
     binaries=[],
     datas=[
         ('requirements.txt', '.'),
-        (os.path.join('assets', 'images', '*.png'), 'assets/images'), 
-        (os.path.join('assets', 'images', '*.ico'), 'assets/images') 
+        ('cubematchfinance/assets/config/config.py', 'assets/config'),
+        ('cubematchfinance/assets/config/config.json', 'assets/config'),
+        ('cubematchfinance/assets/images/*.png', 'assets/images'),
+        ('cubematchfinance/assets/images/*.ico', 'assets/images'),
+        ('cubematchfinance/entities/tabs.py', 'entities')
     ],
     hiddenimports=[],
     hookspath=[],
@@ -29,13 +30,10 @@ a = Analysis(
     noarchive=False
 )
 
-# ...
-
-
 pyz = PYZ(a.pure, a.zipped_data,
           cipher=block_cipher,
           additional_files=[
-              (os.path.join('cubematchfinance', '__main__.py'), '__main__.py')
+              (main_script, '__main__.py')
           ])
 
 exe = EXE(
@@ -43,7 +41,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='main',
+    name='cubematchfinance',  
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -55,6 +53,7 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
@@ -63,5 +62,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='main',
+    name='cubematchfinance',
 )
