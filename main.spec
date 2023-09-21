@@ -4,7 +4,6 @@ block_cipher = None
 
 import os
 
-# Nombre del archivo principal (__main__.py)
 main_script = 'cubematchfinance/__main__.py'
 
 a = Analysis(
@@ -12,12 +11,11 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('requirements.txt', '.'),
-        ('cubematchfinance/assets/config/config.py', 'assets/config'),
-        ('cubematchfinance/assets/config/config.json', 'assets/config'),
-        ('cubematchfinance/assets/images/*.png', 'assets/images'),
-        ('cubematchfinance/assets/images/*.ico', 'assets/images'),
-        ('cubematchfinance/entities/tabs.py', 'entities')
+        ('cubematchfinance/assets/config/config.py', 'cubematchfinance/assets/config'),
+        ('cubematchfinance/assets/config/config.json', 'cubematchfinance/assets/config'),
+        ('cubematchfinance/assets/images/*.png', 'cubematchfinance/assets/images'),
+        ('cubematchfinance/assets/images/*.ico', 'cubematchfinance/assets/images'),
+        ('cubematchfinance/entities/tabs.py', 'cubematchfinance/entities')
     ],
     hiddenimports=[],
     hookspath=[],

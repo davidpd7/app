@@ -2,9 +2,9 @@ import os
 import inspect
 
 from PyQt6 import QtGui
-from PyQt6.QtCore import QUrl, QSize,Qt
+from PyQt6.QtCore import QUrl, QSize, Qt
 from PyQt6.QtWidgets import (QMainWindow,QWidget, QHBoxLayout, 
-                             QVBoxLayout,QTabWidget, QLabel,
+                             QVBoxLayout, QTabWidget, QLabel,
                              QPushButton)
 
 from PyQt6.QtGui import QDesktopServices
@@ -36,7 +36,6 @@ class View(QMainWindow):
         self.__create_and_add_tabs()
         self.__add_link_buttons()
 
-
     def __create_and_add_tabs(self):
         __tabs = QTabWidget()
         self.__vlayout.addWidget(__tabs)
@@ -49,7 +48,6 @@ class View(QMainWindow):
                 tab_instance = object()
                 self.tab_instances[name_object] = tab_instance  
                 __tabs.addTab(tab_instance, tab_instance.get_name())
-    
                 
     def __create_link_buttons(self, button, description, url):
             
