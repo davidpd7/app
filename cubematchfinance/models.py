@@ -432,7 +432,7 @@ class Model:
                     if "NL" in name:
                         self.NL = pd.read_excel(name, skiprows=3, skipfooter=6)
             except:
-                error_message = f"An error occurred while obtaning books:\n"
+                error_message = f"An error occurred while obtaining books"
                 QMessageBox.critical(None, "Error", error_message)
                 
         def order_book_cleaner(self):
@@ -451,7 +451,7 @@ class Model:
                 self.__index_creation()
                 return self.OB2023
             except:
-                error_message = f"An error occurred while cleaning books:\n"
+                error_message = f"An error occurred while cleaning books"
                 QMessageBox.critical(None, "Error", error_message)
         
         def export_order_book(self):
