@@ -8,6 +8,8 @@ import pdfplumber
 import pandas as pd
 import subprocess
 import openpyxl
+import numpy as np
+from datetime import datetime
 
 
 class Model:
@@ -427,46 +429,138 @@ class Model:
                 error_message = f"An error occurred while browsing files:\n{str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
         
-        def assingorderbook(self):
-            
-            for name in self.fileName:
-                if "CMIRE" in name:
-                    self.IRE = pd.read_excel(name)
-                if "UK" in name:
-                    self.UK = pd.read_excel(name)
-                if "NL" in name:
-                    self.NL = pd.read_excel(name)
+        def __assingorderbook(self):
+            try:
+                for name in self.fileName:
+                    if "CMIRE" in name:
+                        self.IRE = pd.read_excel(name, skiprows=3, skipfooter=7)
+                    if "UK" in name:
+                        self.UK = pd.read_excel(name, skiprows=3, skipfooter=7)
+                    if "NL" in name:
+                        self.NL = pd.read_excel(name, skiprows=3, skipfooter=6)
+            except:
+                error_message = f"An error occurred while obtaning books:\n"
+                QMessageBox.critical(None, "Error", error_message)
+                
+        def order_book_cleaner(self):
+            try:
+                self.__assingorderbook()
+                self.__first_step()
+                self.__second_step()
+                self.__third_step()
+                self.__fourth_step()
+                self.__fifth_step()
+                self.__sixth_step()
+                self.__seventh_step()
+                self.__eighth_step()
+                self.__nineth_step()
+                self.__tenth_step()
+                self.__index_creation()
+                return self.OB2023
+            except:
+                error_message = f"An error occurred while cleaning books:\n"
+                QMessageBox.critical(None, "Error", error_message)
         
-        def first_step(self):
-            IRE = IRE.loc[:, ~IRE.columns.str.startswith('Unnamed')]
-            UK = UK.loc[:, ~UK.columns.str.startswith('Unnamed')]
-            CMBV = CMBV.loc[:, ~CMBV.columns.str.startswith('Unnamed')]
+        def export_order_book(self):
+            try:
+                folder_path = os.path.dirname(self.fileName[0])
+                return self.OB2023.to_excel(os.path.join(folder_path,'OB-ThisYear.xlsx'))
+            except:
+                error_message = f"An error occurred while exporting book:\n"
+                QMessageBox.critical(None, "Error", error_message)
+
+        
+        def __first_step(self):
+            self.IRE = self.IRE.loc[:, ~self.IRE.columns.str.startswith('Unnamed')]
+            self.UK = self.UK.loc[:, ~self.UK.columns.str.startswith('Unnamed')]
+            self.NL = self.NL.loc[:, ~self.NL.columns.str.startswith('Unnamed')]
     
-        def second_step(self):
-            IRE.drop(labels=0, axis = 0, inplace= True)
-            UK.drop(labels=0, axis = 0, inplace= True)
-            CMBV.drop(labels=0, axis = 0, inplace= True)
-            IRE.drop(columns='Comments', inplace=True)
-            UK.drop(columns='Comments', inplace=True)
-            CMBV.drop(columns='Comments', inplace=True)
+        def __second_step(self):
+            self.IRE.drop(labels=0, axis = 0, inplace= True)
+            self.UK.drop(labels=0, axis = 0, inplace= True)
+            self.NL.drop(labels=0, axis = 0, inplace= True)
+            self.IRE.drop(columns='Comments', inplace=True)
+            self.UK.drop(columns='Comments', inplace=True)
+            self.NL.drop(columns='Comments', inplace=True)
         
-        def third_step(self):
+        def __third_step(self):
             columns_to_renameUK = {'Cost ': 'Cost Rate','Sale':'Sale Rate'}
             columns_to_renameBV = {'Pay Rate': 'Cost Rate', 'Sale Rate/Fee':'Sale Rate'}
 
-            UK.rename(columns=columns_to_renameUK, inplace=True)
-            CMBV.rename(columns=columns_to_renameBV, inplace=True)
+            self.UK.rename(columns=columns_to_renameUK, inplace=True)
+            self.NL.rename(columns=columns_to_renameBV, inplace=True)
         
-        def remove_estimations(data):
+        def __remove_estimations(self, data):
             current_month = datetime.now().strftime(('%B'))
             position_current_month = data.columns.get_loc(current_month)
             data.iloc[:,position_current_month:] = np.nan
 
-        def fourth_step(self):
-            remove_estimations(IRE)
-            remove_estimations(UK)
-            remove_estimations(CMBV)
-                
+        def __fourth_step(self):
+            self.__remove_estimations(self.IRE)
+            self.__remove_estimations(self.UK)
+            self.__remove_estimations(self.NL)
+
+
+        def __fifth_step(self):
+            self.IRE['Location'] = 'Ireland'
+            self.UK['Location'] = 'United Kingdom'
+            self.NL['Location'] = 'Netherlands'
+            self.UK['Project'] = np.nan
+            self.NL['Project'] = np.nan
+            self.NL['Role'] = np.nan
+            self.IRE.Project.replace(np.nan, 'Unknown', inplace=True)
+            self.IRE.Role.replace(np.nan, 'Unknown', inplace=True)
+            self.IRE['CM Role'].replace(np.nan, 'Unknown', inplace=True)
+            self.UK.Project.replace(np.nan, 'Unknown', inplace=True)
+            self.UK.Role.replace(np.nan, 'Unknown', inplace=True)
+            self.NL.Project.replace(np.nan, 'Unknown', inplace=True)
+            self.NL.Role.replace(np.nan, 'Unknown', inplace=True)
+        
+        def __sixth_step(self):
+            for column in ['End Date','Start Date']:
+                self.IRE[column]= pd.to_datetime(self.IRE[column],format='%d/%m/%Y',)
+                self.UK[column] = pd.to_datetime(self.UK[column], format='%d/%m/%Y')
+                self.NL[column] = pd.to_datetime(self.NL[column], format='%d/%m/%Y')
+        
+        def __seventh_step(self):
+            self.IRE['Cost Rate'] = ['Permanent' if x == 'Perm' else 'Contractor' for x in self.IRE['Cost Rate']]
+            self.UK['Cost Rate'] = ['Permanent' if x == 'Perm' else 'Contractor' for x in self.UK['Cost Rate']]
+            self.NL['Cost Rate'] = ['Permanent' if x == 'Perm' else 'Contractor' for x in self.NL['Cost Rate']]
+        
+        def __eighth_step(self):
+            cols = self.UK.columns.tolist()
+            cols.insert(2, cols.pop(cols.index('Project')))
+            self.UK = self.UK[cols]
+            cols = self.NL.columns.tolist()
+            cols.insert(2, cols.pop(cols.index('Project')))
+            cols.insert(3, cols.pop(cols.index('Role')))
+            self.NL = self.NL[cols]
+            self.NL['Sale Rate'] = self.NL['Sale Rate'] * 8
+            for column in self.NL.iloc[:,8:-1].columns:
+                self.NL[column].astype(float) 
+                self.NL[column] = self.NL[column]/8
+        
+        def __nineth_step(self):
+            self.OB2023 = pd.concat([self.IRE, self.UK, self.NL])
+            self.OB2023['Year'] = 2023
+            self.OB2023['generation_date'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+
+        def __tenth_step(self):
+            branches = ['NL','IRE','UK']
+            for branch in branches:
+                if branch =='NL':
+                    self.OB2023.loc[self.OB2023['Client'].str.contains(branch), 'Client'] = 'CMNL'
+                if branch == 'IRE':
+                    self.OB2023.loc[self.OB2023['Client'].str.contains(branch), 'Client'] = 'CMIRE'
+                if branch == 'UK':
+                    self.OB2023.loc[self.OB2023['Client'].str.contains(branch), 'Client'] = 'CMUK'
+            self.OB2023['CM Role'].fillna('Unknown', inplace=True)
+        
+        def __index_creation(self):
+            self.OB2023.reset_index(inplace=True)
+            self.OB2023.drop(columns='index', inplace=True)
+        
 
 
 

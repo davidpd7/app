@@ -111,6 +111,7 @@ class Controller:
 
             table.setRowCount(num_rows)
             table.setColumnCount(num_columns)
+            table.setSortingEnabled(True)
 
             for row_idx, row_data in enumerate(data):
                 for col_idx, cell_data in enumerate(row_data):
@@ -140,6 +141,7 @@ class Controller:
             table.setRowCount(rows)
             table.setColumnCount(cols)
             table.setHorizontalHeaderLabels(columns_names)
+            table.setSortingEnabled(True)
 
             for row in range(rows):
                 for col in range(cols):
@@ -155,6 +157,27 @@ class Controller:
         extract_clarity_button = tab_path["Extract Order Book"]
         export_clarity_button = tab_path["Export Order Book"]
         browse_button.clicked.connect(functools.partial(self.__model.tab6.browse))
-        extract_clarity_button.clicked.connect(self.__model.tab6.assingorderbook)
-    
+        extract_clarity_button.clicked.connect(self.__get_dataframe_from_sixth_tab)
+        export_clarity_button.clicked.connect(self.__model.tab6.export_order_book)
+
+
+    def __get_dataframe_from_sixth_tab(self):
+        
+        data = self.__model.tab6.order_book_cleaner()
+        if data is not None:
+            
+            table = self.__tables["SixthTabApp"]["table6"]
+            columns_names = data.columns.to_list()
+            rows, cols = data.shape
+                
+            table.setRowCount(rows)
+            table.setColumnCount(cols)
+            table.setHorizontalHeaderLabels(columns_names)
+            table.setSortingEnabled(True)
+
+            for row in range(rows):
+                for col in range(cols):
+                    item = QTableWidgetItem(str(data.iat[row, col]))
+                    table.setItem(row, col, item)
+            
     
