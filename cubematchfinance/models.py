@@ -171,6 +171,7 @@ class Model:
         def browse(self, button):
             try:
                 self.fileName, _ = QFileDialog.getOpenFileNames(button, 'Open File')
+    
             except Exception as e:
                 error_message = f"An error occurred while browsing files:\n{str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
@@ -194,29 +195,27 @@ class Model:
 
             try:
                 self.pb, _ = QFileDialog.getOpenFileNames(None, 'Open File')
+                
             except Exception as e:
-                error_message = f"An error occurred  extracting Purchase Book: {str(e)}"
-                QMessageBox.critical(None, "Error", error_message)
+                error_message = f"An error occurred  while getting Purchase Book: {str(e)}"
+                print(error_message)
         
         def extract_purchasebook(self):
 
             try:
-                self.pb = pd.read_excel(self.pb[0])
-                return self.pb
+                self.df_pb = pd.read_excel(self.pb[0])
+                return self.df_pb
             except Exception as e:
                 error_message = f"No Purchase Book selected: {str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
 
-
         def renaming_contractors(self, files):
 
             pb = self.extract_purchasebook()
-            if pb == None:
-                return
             files = self.__converter()
             for file in files:
-                old_path = os.path.dirname(file)
                 try:
+                    old_path = os.path.dirname(file)
                     full_name = os.path.basename(file)
                     company = full_name.split('_')[0]
                     date = pd.to_datetime(full_name.split('_')[1])
@@ -235,7 +234,6 @@ class Model:
                 except Exception as e:
                     error_message = f"An error occurred while renaming: {str(e)}"
                     QMessageBox.critical(None, "Error", error_message)
-        
 
         def __converter(self):
             
