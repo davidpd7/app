@@ -15,8 +15,8 @@ class TabBase(QWidget):
         super().__init__()
         self.config_path = config_path
         self.__name = cfg_item(*self.config_path, "name")
-        self.tab_layout = QVBoxLayout()
-        self.setLayout(self.tab_layout)
+        self.__tab_layout = QVBoxLayout()
+        self.setLayout(self.__tab_layout)
         self.__tab_widgets()
 
     def __tab_widgets(self):
@@ -27,7 +27,7 @@ class TabBase(QWidget):
         button_names = cfg_item(*self.config_path, "push_buttons", "names")
         positions = cfg_item(*self.config_path, "push_buttons", "pos")
         self.buttons_layout = QGridLayout()
-        self.tab_layout.addLayout(self.buttons_layout)
+        self.__tab_layout.addLayout(self.buttons_layout)
         self.__pushbuttons = {}
 
         for name, pos in zip(button_names, positions):
@@ -38,11 +38,11 @@ class TabBase(QWidget):
 
     def __create_table(self):
         table_layout = QHBoxLayout()
-        self.tab_layout.addLayout(table_layout)
+        self.__tab_layout.addLayout(table_layout)
         self.__tables = {}
         table_name = cfg_item(*self.config_path, "tables", "names")
         self.__tables[table_name] = QTableWidget()
-        self.tab_layout.addWidget(self.__tables[table_name])
+        self.__tab_layout.addWidget(self.__tables[table_name])
  
     def __css_style(self, styles_data):
         css_style = ""

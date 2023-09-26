@@ -27,8 +27,7 @@ class View(QMainWindow):
 
         self.__vlayout = QHBoxLayout(self.__central_widget)
         self.__central_widget.setLayout(self.__vlayout)
-        self.label = QLabel(self)
-
+        
         self.__render()
         
     def __render(self):
@@ -37,11 +36,11 @@ class View(QMainWindow):
         self.__add_link_buttons()
 
     def __create_and_add_tabs(self):
-        __tabs = QTabWidget()
-        self.__vlayout.addWidget(__tabs)
         
         tabs_list = inspect.getmembers(tabs)
         self.tab_instances = {} 
+        __tabs = QTabWidget()
+        self.__vlayout.addWidget(__tabs)
 
         for name_object, object in tabs_list:
             if inspect.isclass(object) and "TabApp" in name_object:
