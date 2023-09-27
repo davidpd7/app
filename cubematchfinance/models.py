@@ -387,9 +387,9 @@ class Model:
                 exceptions = df_total_horas['Surname'].isin(exceptions)
                 df_total_horas.loc[exceptions, 'Total Days'] = df_total_horas.loc[exceptions, 'Sum of Hours'] / 7.5
                 df_total_horas.loc[~exceptions, 'Total Days'] = df_total_horas.loc[~exceptions, 'Sum of Hours'] / 8
-                df_result = df_total_horas.sort_values('Contractor PO Number')
+                df_result = df_total_horas
                 df_total_amount = df.groupby(['Contractor PO Number', 'Surname', 'First Name']).agg({'Sum of Total': 'sum'}).reset_index()
-                self.df_result = df_result.merge(df_total_amount, on=['Contractor PO Number', 'Surname', 'First Name']).sort_values('Contractor PO Number')
+                self.df_result = df_result.merge(df_total_amount, on=['Contractor PO Number', 'Surname', 'First Name'])
             except Exception as e:
                 error_message =f"Error while extracting Clarity information: {str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
