@@ -1,6 +1,6 @@
 {   
     "app":{
-        "title": "CubeMatch Finance",
+        "title": "CuFi",
         "icon_path": ["cubematchfinance", "assets","images","cubematchologo.ico"],
         "geometry" : [720, 480, 720, 480]
     },

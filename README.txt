@@ -13,6 +13,7 @@ The CubeMatch Finance App is a tool designed to help you efficiently manage time
   -  pipenv shell
   -  pipenv sync
   -  pip install cubematchfinance
+
 Launch the app by running:
 
 python cubematchfinance
