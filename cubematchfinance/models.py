@@ -375,27 +375,35 @@ class Model:
                 QMessageBox.critical(None, "Error", error_message)
 
         def extract_clarity_details(self):
-
+       
             exceptions = ['Weedle']
             try:
-                file_names = self.fileName[0]
-                self.folder_path = os.path.dirname(file_names)
-                df = pd.read_excel(file_names, engine='pyxlsb', skiprows=1, index_col=0).dropna()
-                df.columns = df.iloc[df.index.get_loc('Resource ID')]
-                df = df.iloc[1:]
-                df_total_horas = df.groupby(['Contractor PO Number', 'Surname', 'First Name']).agg({'Sum of Hours': 'sum'}).reset_index()
-                exceptions = df_total_horas['Surname'].isin(exceptions)
-                df_total_horas.loc[exceptions, 'Total Days'] = df_total_horas.loc[exceptions, 'Sum of Hours'] / 7.5
-                df_total_horas.loc[~exceptions, 'Total Days'] = df_total_horas.loc[~exceptions, 'Sum of Hours'] / 8
-                df_result = df_total_horas
-                df_total_amount = df.groupby(['Contractor PO Number', 'Surname', 'First Name']).agg({'Sum of Total': 'sum'}).reset_index()
-                self.df_result = df_result.merge(df_total_amount, on=['Contractor PO Number', 'Surname', 'First Name'])
+                df = self.clean_clarity()
+                df_grouped = df.groupby(['Contractor PO Number', 'Surname', 'First Name']).agg({'Sum of Hours': 'sum', 'Sum of Total': 'sum'}).reset_index()
+                mask = df_grouped['Surname'].isin(exceptions)
+                df_grouped['Total Days'] = df_grouped['Sum of Hours'] / mask.replace({True: 7.5, False: 8})
+                self.df_result = df_grouped
             except Exception as e:
                 error_message =f"Error while extracting Clarity information: {str(e)}"
                 QMessageBox.critical(None, "Error", error_message)
-        
             else:
                 return  self.df_result
+
+        
+        def clean_clarity(self):
+            try:
+                file_names = self.fileName[0]
+                self.folder_path = os.path.dirname(file_names)
+                df = pd.read_excel(file_names, engine='pyxlsb', skiprows=1, index_col=0)
+                df.columns = df.iloc[df.index.get_loc('Resource ID')]
+                mask = pd.notnull(df.columns)
+                df = df.loc [:, mask] 
+                df = df[~df.isna().any(axis=1)]
+                df = df.iloc[1:]
+                return df
+            except Exception as e:
+                error_message =f"Error while cleaning Clarity information: {str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
         
         def export_clarity_to_excel(self):
             try:
@@ -409,7 +417,6 @@ class Model:
         def __init__(self, parent):
 
             self.parent = parent
-            
         
         def browse(self):
 

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='CubeMatch',
-    version='0.3',
+    version='0.32',
     author='David Perez',
     author_email='david.perez@cubematch.com',
     packages=['cubematchfinance'],
