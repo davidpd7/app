@@ -39,7 +39,7 @@ class View(QMainWindow):
         
         tabs_list = inspect.getmembers(tabs)
         self.tab_instances = {} 
-        __tabs = QTabWidget()
+        __tabs = QTabWidget(parent = self.__central_widget)
         self.__vlayout.addWidget(__tabs)
 
         for name_object, object in tabs_list:
@@ -50,8 +50,8 @@ class View(QMainWindow):
                 
     def __create_link_buttons(self, button, description, url):
             
-        button = QPushButton()
-        label = QLabel(description)
+        button = QPushButton(parent = self.__central_widget)
+        label = QLabel(description,parent = self.__central_widget)
         icon_size = QSize(*cfg_item("view", "icon_size"))
         button_size = QSize(*cfg_item("view", "button_size"))
         style = self.__css_style(cfg_item('view','button_style'))

@@ -31,7 +31,7 @@ class TabBase(QWidget):
         self.__pushbuttons = {}
 
         for name, pos in zip(button_names, positions):
-            self.__pushbuttons[name] = QPushButton(name)
+            self.__pushbuttons[name] = QPushButton(name, parent = self)
             self.__pushbuttons[name].setFixedSize(*cfg_item(*self.config_path, "push_buttons", "size"))
             self.__pushbuttons[name].setStyleSheet(self.__css_style(cfg_item('view','button_style')))
             self.buttons_layout.addWidget(self.__pushbuttons[name], *pos)
@@ -83,7 +83,7 @@ class ThirdTabApp(TabBase):
         positions = cfg_item(*self.config_path, "check_buttons", "pos")
         self.__checkbuttons = {}   
         for name, pos in zip(names, positions):
-                self.__checkbuttons[name] = QRadioButton(name)
+                self.__checkbuttons[name] = QRadioButton(name, parent = self)
                 self.__checkbuttons[name].setFixedSize(*cfg_item(*self.config_path, "check_buttons", "size"))
                 self.buttons_layout.addWidget(self.__checkbuttons[name], *pos)
     
