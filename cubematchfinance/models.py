@@ -2,6 +2,7 @@ import os
 import re
 
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
+from PyQt6.QtCore import QStandardPaths
 
 import PyPDF2
 import pdfplumber
@@ -21,6 +22,7 @@ class Model:
         self.tab4 = self.Tab4(self)
         self.tab5 = self.Tab5(self)
         self.tab6 = self.Tab6(self)
+        self.tab7 = self.Tab7(self)
 
     def sanitize_filename(self, filename):
 
@@ -556,7 +558,51 @@ class Model:
         def __index_creation(self):
             self.OB2023.reset_index(inplace=True)
             self.OB2023.drop(columns='index', inplace=True)
+
+    
+    class Tab7:
+
+        def __init__(self, parent):
+
+            self.parent = parent
+            self.home_dir = QStandardPaths.standardLocations(QStandardPaths.StandardLocation.DesktopLocation)[0]
         
+        def browse(self):
+
+            try:
+                self.fileName, _ = QFileDialog.getOpenFileNames(None, 'Open File')
+            except Exception as e:
+
+                error_message = f"An error occurred while browsing files:\n{str(e)}"
+                QMessageBox.critical(None, "Error", error_message)
+        
+
+        def open_database(self):
+            self.database = self.fileName[0]
+            self.assignments = pd.read_excel(self.database, sheet_name='Assigments')
+            self.sales = pd.read_excel(self.database , sheet_name='Sales', index_col=0)
+            self.associates = pd.read_excel(self.database , sheet_name='Associates', index_col=0)
+
+
+        def extract_sales_list(self):
+            self.open_database()
+            active_assignments = self.assignments.loc[self.assignments['Status'] == "Active"]
+            sales_list = active_assignments[['ID','Name', 'Client', 'Associate.ID','Client.ID','Location']].sort_values('Location')
+            sales_list.rename(columns= {'ID':'Assignment ID'}, inplace=True)
+            new_index = [self.sales.index[-1] + i for i in range(1, len(sales_list)+1)]
+            sales_list.index = new_index
+            sales_list = pd.concat([self.sales, sales_list], axis=0)
+            ire_sales_list = sales_list.loc[sales_list['Location']== 'Ireland'].drop(columns='Location')
+            bv_sales_list = sales_list.loc[sales_list['Location']== 'Netherlands'].drop(columns='Location')
+            uk_sales_list = sales_list.loc[sales_list['Location']== 'United Kingdom'].drop(columns='Location')
+            return ire_sales_list,  bv_sales_list, uk_sales_list
+        
+        def export_sales_list(self):
+            ire, bv, uk = self.extract_sales_list()
+            ire.to_excel(os.path.join(self.home_dir, 'CMIRE Sales List.xlsx'))
+            bv.to_excel(os.path.join(self.home_dir, 'CMBV Sales List.xlsx'))
+            uk.to_excel(os.path.join(self.home_dir, 'CMUK Sales List.xlsx'))  
+
 
 
 

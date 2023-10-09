@@ -22,6 +22,7 @@ class Controller:
         self.__connection_fourth_tab()
         self.__connection_fifth_tab()
         self.__connection_sixth_tab()
+        self.__connection_seventh_tab()
     
     def __connection_first_tab(self):
 
@@ -174,5 +175,14 @@ class Controller:
                 for col in range(cols):
                     item = QTableWidgetItem(str(data.iat[row, col]))
                     table.setItem(row, col, item)
+    
+
+    def __connection_seventh_tab(self):
+
+        tab_path = self.__pushbuttons["SeventhTabApp"]
+        browse_button = tab_path["Browse Database"]
+        export_clarity_button = tab_path["Export Sales Lists"]
+        browse_button.clicked.connect(functools.partial(self.__model.tab7.browse))
+        export_clarity_button.clicked.connect(self.__model.tab7.export_sales_list)
             
     

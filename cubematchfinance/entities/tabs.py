@@ -37,13 +37,14 @@ class TabBase(QWidget):
             self.buttons_layout.addWidget(self.__pushbuttons[name], *pos)
 
     def __create_table(self):
-        table_layout = QHBoxLayout()
-        self.__tab_layout.addLayout(table_layout)
-        self.__tables = {}
-        table_name = cfg_item(*self.config_path, "tables", "names")
-        self.__tables[table_name] = QTableWidget()
-        self.__tab_layout.addWidget(self.__tables[table_name])
- 
+        if "tables" in cfg_item(*self.config_path):
+            table_layout = QHBoxLayout()
+            self.__tab_layout.addLayout(table_layout)
+            self.__tables = {}
+            table_name = cfg_item(*self.config_path, "tables", "names")
+            self.__tables[table_name] = QTableWidget()
+            self.__tab_layout.addWidget(self.__tables[table_name])
+    
     def __css_style(self, styles_data):
         css_style = ""
         for key, value in styles_data.items():
@@ -104,3 +105,8 @@ class SixthTabApp(TabBase):
 
     def __init__(self):
         super().__init__(("tabs", 'tab6'))
+
+class SeventhTabApp(TabBase):
+
+    def __init__(self):
+        super().__init__(("tabs", 'tab7'))
