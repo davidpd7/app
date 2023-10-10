@@ -1,13 +1,13 @@
 import os
 import inspect
 
-from PyQt6 import QtGui
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QUrl, QSize, Qt
-from PyQt6.QtWidgets import (QMainWindow,QWidget, QHBoxLayout, 
+from PyQt6.QtWidgets import (QMainWindow,QWidget, 
                              QVBoxLayout, QTabWidget, QLabel,
-                             QPushButton)
+                             QPushButton, QGridLayout)
 
-from PyQt6.QtGui import QDesktopServices
+from PyQt6.QtGui import QDesktopServices, QPixmap
 
 from cubematchfinance.assets.config.config import cfg_item
 import cubematchfinance.entities.tabs as tabs
@@ -18,32 +18,42 @@ class View(QMainWindow):
 
         super().__init__()
         
-        self.setWindowIcon(QtGui.QIcon(os.path.join(*cfg_item("app","icon_path"))))
+        self.setWindowIcon(QIcon(os.path.join(*cfg_item("app","icon_path"))))
         self.setWindowTitle(cfg_item("app","title"))
         self.setGeometry(*cfg_item("app", "geometry"))
         
         self.__central_widget = QWidget(self)
+        
+        self.__main_layout = QGridLayout(self.__central_widget)
         self.setCentralWidget(self.__central_widget)
 
-        self.__vlayout = QHBoxLayout(self.__central_widget)
-        self.__central_widget.setLayout(self.__vlayout)
-        
+
         self.__render()
         
     def __render(self):
-         
+
         self.__create_and_add_tabs()
         self.__add_link_buttons()
+        #self.__main_picture()
+    
+
+    def __main_picture(self):
+
+        self.label = QLabel(self.__central_widget)
+        pixmap = QPixmap(os.path.join(*cfg_item("app", "main_picture")))
+        self.label.setPixmap(pixmap.scaled(self.__central_widget.size()))
+        self.__main_layout.addWidget(self.label, *cfg_item('app','main_picture_pos'))
+
 
     def __create_and_add_tabs(self):
         
         tabs_list = inspect.getmembers(tabs)
         self.tab_instances = {} 
         __tabs = QTabWidget(parent = self.__central_widget)
-        self.__vlayout.addWidget(__tabs)
-
+        self.__main_layout.addWidget(__tabs,*cfg_item('app','tab_layout_pos'))
+        
         for name_object, object in tabs_list:
-            if inspect.isclass(object) and "TabApp" in name_object:
+           if inspect.isclass(object) and "TabApp" in name_object:
                 tab_instance = object()
                 self.tab_instances[name_object] = tab_instance  
                 __tabs.addTab(tab_instance, tab_instance.get_name())
@@ -65,19 +75,18 @@ class View(QMainWindow):
     
     def __add_link_buttons(self):
             
-            vbox = QVBoxLayout()
-            
             button_names = cfg_item("view","push_buttons")
-            self.__vlayout.addLayout(vbox)
+            verticalLayout_links = QVBoxLayout()
+            self.__main_layout.addLayout(verticalLayout_links, *cfg_item('app','links_layout'))
 
             for name in button_names:
                 icon_path = os.path.join(*cfg_item("view","push_buttons", name, "icon_path"))
                 url = cfg_item("view","push_buttons", name, "url")
                 description = cfg_item("view","push_buttons", name, "name")
                 button, label = self.__create_link_buttons(icon_path, description, url)
-                button.setIcon(QtGui.QIcon(icon_path))
-                vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
-                vbox.addWidget(label, alignment=Qt.AlignmentFlag.AlignCenter)
+                button.setIcon(QIcon(icon_path))
+                verticalLayout_links.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
+                verticalLayout_links.addWidget(label, alignment=Qt.AlignmentFlag.AlignCenter)
     
     def __css_style(self, styles_data):
         css_style = ""

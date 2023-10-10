@@ -2,7 +2,11 @@
     "app":{
         "title": "CuFi",
         "icon_path": ["cubematchfinance", "assets","images","cubematchologo.ico"],
-        "geometry" : [720, 480, 720, 480]
+        "main_picture":["cubematchfinance", "assets","images","main_picture.png"],
+        "geometry" : [720, 480, 720, 480],
+        "tab_layout_pos" :[1,1,1,1],
+        "links_layout": [0, 0, 2, 1],
+        "main_picture_pos" : [0,1,1,1]
     },
     "view":{
         "button_style": {
@@ -56,14 +60,28 @@
     },
 
     "tabs":{
-        "tab1":{ 
-            "name" : "Timesheets",
-            "push_buttons":{
-                "names": ["Browse","Rename"],
-                "size": [100,40],
-                "pos":[[0,1],[1,1]]
+        "tab1":{
+            "name" : "Renaming",
+            "layout_timesheets":{
+                "layout_pos": [0, 80, 251, 291],
+                "push_buttons":{    
+                    "names": ["Browse Timesheets","Rename Timesheets"],
+                    "size": [150,100],
+                    "pos":[[,0,1,1],[0,0,1,1]]
+                        },
+                "layout_size": [0, 80, 251, 291]
+                },
+            "layout_sales":{
+                    "layout_pos": [780, 80, 362, 301],
+                    "push_buttons":{
+                        "names":["Browse Invoices","Split","Rename Invoices"],
+                        "size": [150,75],
+                        "pos":[[0, 0, 0, 0],[2, 1, 1, 8],[2,2, 1,2]]
+                            }
+        
+                    }
             }
-        },
+        ,
         "tab2": {
             "name": "Sales Invoices",
             "push_buttons":{

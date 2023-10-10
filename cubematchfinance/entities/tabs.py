@@ -4,7 +4,9 @@ from PyQt6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout,
 
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, 
                              QTableWidget, QHBoxLayout, QRadioButton, 
-                             QGridLayout)
+                             QGridLayout, QSizePolicy, QSpacerItem)
+
+from PyQt6.QtCore import QRect
 
 from cubematchfinance.assets.config.config import cfg_item
 
@@ -60,11 +62,64 @@ class TabBase(QWidget):
     def get_tables(self):
         return self.__tables
 
-class FirstTabApp(TabBase):
+class FirstTabApp(QWidget):
 
     def __init__(self):
 
-        super().__init__(("tabs", 'tab1'))
+        super().__init__()
+        self.config_path = ("tabs", 'tab1')
+        self.__name = cfg_item(*self.config_path, "name")
+        self.__main_gridLayout = QGridLayout(self)
+        self.verticalSpacer = QSpacerItem(25, 25)
+        self.__main_gridLayout.addItem(self.verticalSpacer, 1, 2, 1, 1)
+        self.__tab_widgets()
+
+    def __tab_widgets(self):
+        self.__pushbuttons = {}
+        self.__create_buttons_timesheets()
+        self.__create_buttons_sales()
+
+        
+    def __create_buttons_timesheets(self):
+        
+        self.__gridLayouttimesheets = QGridLayout()
+
+        button_names = cfg_item(*self.config_path, "layout_timesheets","push_buttons", "names")
+        positions = cfg_item(*self.config_path, "layout_timesheets","push_buttons", "pos")
+
+        for name, pos in zip(button_names, positions):
+            self.__pushbuttons[name] = QPushButton(name, parent=self)
+            self.__pushbuttons[name].setFixedSize(*cfg_item(*self.config_path, "layout_timesheets",  "push_buttons", "size"))
+            self.__pushbuttons[name].setStyleSheet(self.__css_style(cfg_item('view','button_style')))
+            self.__gridLayouttimesheets.addWidget(self.__pushbuttons[name], *pos)
+    
+    def __create_buttons_sales(self):
+        
+        self.__gridLayoutsales = QGridLayout()
+        button_names = cfg_item(*self.config_path, "layout_sales","push_buttons", "names")
+        positions = cfg_item(*self.config_path, "layout_sales","push_buttons", "pos")
+
+        for name, pos in zip(button_names, positions):
+            self.__pushbuttons[name] = QPushButton(name, parent=self)
+            self.__pushbuttons[name].setFixedSize(*cfg_item(*self.config_path, "layout_sales",  "push_buttons", "size"))
+            self.__pushbuttons[name].setStyleSheet(self.__css_style(cfg_item('view','button_style')))
+            self.__gridLayoutsales.addWidget(self.__pushbuttons[name], *pos)
+     
+
+    def __css_style(self, styles_data):
+        css_style = ""
+        for key, value in styles_data.items():
+            css_style += f"{key}: {value}; "
+        return css_style
+
+    def get_name(self):
+        return self.__name
+
+    def get_pushbuttons(self):
+        return self.__pushbuttons
+    
+    def get_tables(self):
+        return self.__tables
     
 class SecondTabApp(TabBase):
 

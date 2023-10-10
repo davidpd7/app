@@ -473,6 +473,7 @@ class Model:
             self.IRE = self.IRE.loc[:, ~self.IRE.columns.str.startswith('Unnamed')]
             self.UK = self.UK.loc[:, ~self.UK.columns.str.startswith('Unnamed')]
             self.NL = self.NL.loc[:, ~self.NL.columns.str.startswith('Unnamed')]
+           
     
         def __second_step(self):
             self.IRE.drop(labels=0, axis = 0, inplace= True)
@@ -488,11 +489,13 @@ class Model:
 
             self.UK.rename(columns=columns_to_renameUK, inplace=True)
             self.NL.rename(columns=columns_to_renameBV, inplace=True)
+            
         
         def __remove_estimations(self, data):
             current_month = datetime.now().strftime(('%B'))
             position_current_month = data.columns.get_loc(current_month)
             data.iloc[:,position_current_month:] = np.nan
+            
 
         def __fourth_step(self):
             self.__remove_estimations(self.IRE)
@@ -513,12 +516,14 @@ class Model:
             self.UK.Role.replace(np.nan, 'Unknown', inplace=True)
             self.NL.Project.replace(np.nan, 'Unknown', inplace=True)
             self.NL.Role.replace(np.nan, 'Unknown', inplace=True)
-        
+            
+
         def __sixth_step(self):
             for column in ['End Date','Start Date']:
                 self.IRE[column]= pd.to_datetime(self.IRE[column],format='%d/%m/%Y',)
                 self.UK[column] = pd.to_datetime(self.UK[column], format='%d/%m/%Y')
                 self.NL[column] = pd.to_datetime(self.NL[column], format='%d/%m/%Y')
+            
         
         def __seventh_step(self):
             self.IRE['Cost Rate'] = ['Permanent' if x == 'Perm' else 'Contractor' for x in self.IRE['Cost Rate']]

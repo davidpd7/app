@@ -28,8 +28,8 @@ class Controller:
 
         tab_path = self.__pushbuttons["FirstTabApp"]
 
-        browse_button = tab_path["Browse"]
-        rename_button = tab_path["Rename"]
+        browse_button = tab_path["Browse Timesheets"]
+        rename_button = tab_path["Rename Timesheets"]
         browse_button.clicked.connect(functools.partial(self.__model.tab1.browse, browse_button))
         rename_button.clicked.connect(self.__model.tab1.renaming_timesheets)
         
@@ -162,7 +162,7 @@ class Controller:
         data = self.__model.tab6.order_book_cleaner()
         if data is not None:
             
-            table = self.__tables["SixthTabApp"]["table6"]
+            table = self.__tables["SixthTabApp"]["table4"]
             columns_names = data.columns.to_list()
             rows, cols = data.shape
                 
