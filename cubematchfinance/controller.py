@@ -15,10 +15,7 @@ class Controller:
         self.__pushbuttons = self.__view.get_pushbuttons()
         self.__checkbuttons = self.__view.get_checkbuttons()
         self.__tables = self.__view.get_tables()
-
         self.__connection_first_tab()
-        self.__connection_second_tab()
-        self.__connection_third_tab()
         self.__connection_fourth_tab()
         self.__connection_fifth_tab()
         self.__connection_sixth_tab()
@@ -32,34 +29,27 @@ class Controller:
         rename_button = tab_path["Rename Timesheets"]
         browse_button.clicked.connect(functools.partial(self.__model.tab1.browse, browse_button))
         rename_button.clicked.connect(self.__model.tab1.renaming_timesheets)
-        
-    def __connection_second_tab(self):
 
-        tab_path = self.__pushbuttons["SecondTabApp"]
-
-        browse_button = tab_path["Browse"]
+        browse_button = tab_path["Browse Sales Invoices"]
         split_button = tab_path["Split"]
-        rename_button = tab_path["Rename"]
+        rename_button = tab_path["Rename Invoices"]
         browse_button.clicked.connect(functools.partial(self.__model.tab2.browse, browse_button))
         split_button.clicked.connect(self.__model.tab2.split_pdf)
         rename_button.clicked.connect(self.__model.tab2.renaming_invoices)
-
-    def __connection_third_tab(self):
-
-        tab_path = self.__pushbuttons["ThirdTabApp"]
        
         browsepb_button = tab_path["Browse Purchase Book"]
         browseinvoices_button = tab_path["Browse Invoices"]
-        open_purchasebook_button = tab_path["Open Purchase Book"]
+
         rename_button = tab_path["Rename"]
         browsepb_button.clicked.connect(self.__model.tab3.browse_pb)
         browseinvoices_button.clicked.connect(functools.partial(self.__model.tab3.browse, browseinvoices_button))
         rename_button.clicked.connect(functools.partial(self.__execute_action, rename_button))
-        open_purchasebook_button.clicked.connect(self.__get_dataframe_from_third_tab)
-
+    
+    
+        
     def __execute_action(self, button):
 
-        check_buttons_path = self.__checkbuttons["ThirdTabApp"]
+        check_buttons_path = self.__checkbuttons["FirstTabApp", "layout_purchases"]
         check_button_contractor = check_buttons_path["Contractor Invoices"]
         check_button_noncontractor = check_buttons_path["Non-contractor Invoices"]
         check_button_other = check_buttons_path["Other Invoices"]
@@ -70,26 +60,10 @@ class Controller:
         if check_button_noncontractor.isChecked() or check_button_other.isChecked():
             button.clicked.connect(self.__model.tab3.renaming_noncontractors_other)
     
-    def __get_dataframe_from_third_tab(self):
-
-        data = self.__model.tab3.extract_purchasebook()
-        if data is not None:
-           
-            table = self.__tables["ThirdTabApp"]["table3"]
-            columns_names = data.columns.to_list()
-            rows, cols = data.shape
-            table.setRowCount(rows)
-            table.setColumnCount(cols)
-            table.setHorizontalHeaderLabels(columns_names)
-
-            for row in range(rows):
-                for col in range(cols):
-                    item = QTableWidgetItem(str(data.iat[row, col]))
-                    table.setItem(row, col, item)
     
     def __connection_fourth_tab(self):
 
-        tab_path = self.__pushbuttons["FourthTabApp"]
+        tab_path = self.__pushbuttons["SecondTabApp"]
     
         browse_button = tab_path["Browse PDF Salaries File"]
         extract_salaries_button = tab_path["Extract Salaries"]
@@ -103,7 +77,7 @@ class Controller:
 
         if self.__model.tab4.salaries_extract():
             data =  self.__model.tab4.salaries_extract()
-            table = self.__tables["FourthTabApp"]["table4"]
+            table = self.__tables["SecondTabApp"]["table4"]
             num_rows = len(data)
             num_columns = len(data[0]) if data else 0
 
@@ -118,7 +92,7 @@ class Controller:
 
     def __connection_fifth_tab(self):
 
-        tab_path = self.__pushbuttons["FifthTabApp"]
+        tab_path = self.__pushbuttons["ThirdTabApp"]
     
         browse_button = tab_path["Browse Clarity Extract"]
         extract_clarity_button = tab_path["Extract Clarity Details"]
@@ -132,7 +106,7 @@ class Controller:
         data = self.__model.tab5.extract_clarity_details()
         if data is not None:
             
-            table = self.__tables["FifthTabApp"]["table5"]
+            table = self.__tables["ThirdTabApp"]["table3"]
             columns_names = data.columns.to_list()
             rows, cols = data.shape
                 
@@ -148,7 +122,7 @@ class Controller:
 
     def __connection_sixth_tab(self):
 
-        tab_path = self.__pushbuttons["SixthTabApp"]
+        tab_path = self.__pushbuttons["FourthTabApp"]
     
         browse_button = tab_path["Browse Order Books"]
         extract_clarity_button = tab_path["Extract Order Book"]
@@ -162,7 +136,7 @@ class Controller:
         data = self.__model.tab6.order_book_cleaner()
         if data is not None:
             
-            table = self.__tables["SixthTabApp"]["table4"]
+            table = self.__tables["FourthTabApp"]["table4"]
             columns_names = data.columns.to_list()
             rows, cols = data.shape
                 
@@ -179,7 +153,7 @@ class Controller:
 
     def __connection_seventh_tab(self):
 
-        tab_path = self.__pushbuttons["SeventhTabApp"]
+        tab_path = self.__pushbuttons["FifthTabApp"]
         browse_button = tab_path["Browse Database"]
         export_clarity_button = tab_path["Export Sales Lists"]
         browse_button.clicked.connect(functools.partial(self.__model.tab7.browse))

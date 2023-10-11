@@ -607,6 +607,10 @@ class Model:
             ire.to_excel(os.path.join(self.home_dir, 'CMIRE Sales List.xlsx'))
             bv.to_excel(os.path.join(self.home_dir, 'CMBV Sales List.xlsx'))
             uk.to_excel(os.path.join(self.home_dir, 'CMUK Sales List.xlsx'))  
+        
+
+    
+
 
 
 

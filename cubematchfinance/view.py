@@ -34,8 +34,6 @@ class View(QMainWindow):
 
         self.__create_and_add_tabs()
         self.__add_link_buttons()
-        #self.__main_picture()
-    
 
     def __main_picture(self):
 

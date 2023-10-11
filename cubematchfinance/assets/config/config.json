@@ -6,7 +6,7 @@
         "geometry" : [720, 480, 720, 480],
         "tab_layout_pos" :[1,1,1,1],
         "links_layout": [0, 0, 2, 1],
-        "main_picture_pos" : [0,1,1,1]
+        "main_picture_pos" : [1,0,0,0]
     },
     "view":{
         "button_style": {
@@ -66,49 +66,36 @@
                 "layout_pos": [0, 80, 251, 291],
                 "push_buttons":{    
                     "names": ["Browse Timesheets","Rename Timesheets"],
-                    "size": [150,100],
-                    "pos":[[,0,1,1],[0,0,1,1]]
-                        },
-                "layout_size": [0, 80, 251, 291]
+                    "size": [170,100],
+                    "pos":[[6, 0, 1, 1],[6, 1, 1, 1]]
+                        }
+
                 },
             "layout_sales":{
                     "layout_pos": [780, 80, 362, 301],
                     "push_buttons":{
-                        "names":["Browse Invoices","Split","Rename Invoices"],
-                        "size": [150,75],
-                        "pos":[[0, 0, 0, 0],[2, 1, 1, 8],[2,2, 1,2]]
+                        "names":["Browse Sales Invoices","Split","Rename Invoices"],
+                        "size": [170,100],
+                        "pos":[[6, 3, 1, 1],[ 6, 4, 1, 1],[6, 5, 1, 1]]
                             }
-        
-                    }
+                    },
+            "layout_purchases":{
+                "layout_pos": [780, 80, 362, 301],
+                "push_buttons": {
+                    "names":["Browse Invoices", "Browse Purchase Book","Rename"],
+                    "size": [170,100],
+                    "pos":[[6, 7, 1, 1], [6, 9, 1, 1], [7, 8, 1, 1]]
+                },
+                "check_buttons": 
+                {
+                    "names":["Other Invoices", "Contractor Invoices", "Non-contractor Invoices"],
+                    "size": [170,100],
+                    "pos":[[4, 9, 1, 1],[4, 8, 1, 1],[4, 7, 1, 1]]
+                            }
+                }
             }
         ,
         "tab2": {
-            "name": "Sales Invoices",
-            "push_buttons":{
-               "names":["Browse","Split","Rename"],
-               "size": [100,40],
-               "pos":[[0,0],[0,1],[0,2]]
-            }
-        },
-        "tab3": {
-            "name": "Purchase Invoices",
-            "push_buttons": {
-                "names":["Browse Invoices", "Browse Purchase Book","Open Purchase Book","Rename"],
-                "size": [170,40],
-                "pos":[[0,1], [1,1],[2,1], [3,1]]
-            },
-            "check_buttons": 
-            {
-                "names":["Other Invoices", "Contractor Invoices", "Non-contractor Invoices"],
-                "size": [150,50],
-                "pos":[[0,2],[1,2],[2,2]]
-                        },
-            "tables" : {
-                
-                "names" : "table1"
-            }
-        },
-        "tab4": {
             "name" : "Salary File (CMBV)",
             "push_buttons":{
                 "names":["Browse PDF Salaries File","Extract Salaries","Export Salaries"],
@@ -120,7 +107,7 @@
                 "names" : "table2"
             }
         },
-        "tab5": {
+        "tab3": {
             "name" : "BOI Clarity",
             "push_buttons" : {
                "names":["Browse Clarity Extract","Extract Clarity Details", "Export Details"],
@@ -130,7 +117,7 @@
                 "names" : "table3"
             }       
         },
-        "tab6": {
+        "tab4": {
             "name" : "Order Book",
             "push_buttons" : {
                 "names":["Browse Order Books","Extract Order Book", "Export Order Book"],
@@ -140,7 +127,7 @@
                     "names" : "table4"
             }
         },
-        "tab7" : {
+        "tab5" : {
             "name" : "Database",
             "push_buttons" : {
                 "names":["Browse Database","Export Sales Lists"],
